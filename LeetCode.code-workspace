@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "0001_Two_Sum"
+		},
+		{
+			"path": "0002_Add_Two_Numbers"
+		},
+		{
+			"path": "0003_Longest_Substring_without_Repeating_characters"
+		},
+		{
+			"path": "0004_Median_of_Two_Sorted_Arrays"
+		},
+		{
+			"path": "0005_Longest_Palindromic_Substring"
+		}
+	]
+}
