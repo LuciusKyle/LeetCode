@@ -14,6 +14,24 @@
 		},
 		{
 			"path": "0005_Longest_Palindromic_Substring"
+		},
+		{
+			"path": "0006_ZigZag_Conversion"
+		},
+		{
+			"path": "0007_Reverse_Integer"
+		},
+		{
+			"path": "0008_String_to_Integer"
+		},
+		{
+			"path": "0009_Palindrome_Number"
+		},
+		{
+			"path": "0010_Regular_Expression_Matching"
+		},
+		{
+			"path": "0011_Container_with_Most_Water"
 		}
 	]
 }
