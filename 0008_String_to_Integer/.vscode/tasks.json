@@ -23,6 +23,7 @@
                     "-g",
                     "*.cc",
                     "--std=c++2a",
+                    "-Wall",
                     "-IC:/MinGW-w64/posix/open_source_libs/boost/1_68_0/include",
                     "-IC:/MinGW-w64/posix/open_source_libs/Intel_TBB/tbb-2018_U5/include",
                     "-LC:/MinGW-w64/posix/open_source_libs/boost/1_68_0/lib",
@@ -77,7 +78,8 @@
                 "args": [
                     "*.cc",
                     "-g",
-                    "-std=c++1z",
+                    "-std=c++2a",
+                    "-Wall",
                     "-pthread",
                     "-I/home/lucius/Desktop/Data/CPP_libs/boost/boost_1_68_0_install/include",
                     "-I/home/lucius/Desktop/Data/CPP_libs/FFmpeg/FFmpeg_4.0/include",
@@ -192,7 +194,8 @@
                 "command": "g++",
                 "args": [
                     "*.cc",
-                    "--std=c++1z",
+                    "--std=c++2a",
+                    "-Wall",
                     "-IC:/MinGW-w64/posix/open_source_libs/boost/1_68_0/include",
                     "-IC:/MinGW-w64/posix/open_source_libs/Intel_TBB/tbb-2018_U5/include",
                     "-LC:/MinGW-w64/posix/open_source_libs/boost/1_68_0/lib",
@@ -259,8 +262,9 @@
                 "command": "g++",
                 "args": [
                     "*.cc",
-                    "--std=c++1z",
+                    "--std=c++2a",
                     "-shared",
+                    "-Wall",
                     "-fPIC",
                     "-IC:/MinGW-w64/posix/open_source_libs/boost/1_68_0/include",
                     "-IC:/MinGW-w64/posix/open_source_libs/Intel_TBB/tbb-2018_U5/include",
