@@ -18,7 +18,8 @@ class Solution {
     for (size_t ii = 0; ii < min_size; ++ii) {
       const int first_ch = strs[0][ii];
       for (size_t i = 1; i < strs.size(); ++i)
-        if (strs[i][ii] != first_ch) break;
+        if (strs[i][ii] != first_ch)
+         return string(strs[0].cbegin(), strs[0].cbegin() + same_pre_count);
       same_pre_count++;
     }
     return string(strs[0].cbegin(), strs[0].cbegin() + same_pre_count);
