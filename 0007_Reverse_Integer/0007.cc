@@ -12,6 +12,8 @@ class Solution {
     x *= (positive ? 1 : -1);
     while (x > 0) {
       int digit = x % 10;
+      if (x < 100)
+        if (INT_MAX / 10 < rtn || INT_MAX - digit < rtn) return 0;
       rtn *= 10;
       rtn += digit;
       x /= 10;
