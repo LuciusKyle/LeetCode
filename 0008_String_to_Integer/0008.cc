@@ -52,5 +52,9 @@ int main(void) {
   assert(rtn == 0);
   rtn = atoi("a-bc12"); // see what does the <stdlib.h> version atoi deal with "a-bc12".
   assert(rtn == 0);
+
+  rtn = myAtoi("words and 987");
+  assert(rtn == 987);
+
   return 0;
 }
