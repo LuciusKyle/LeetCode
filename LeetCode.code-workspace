@@ -32,6 +32,30 @@
 		},
 		{
 			"path": "0011_Container_with_Most_Water"
+		},
+		{
+			"path": "0012_Integer_to_Roman"
+		},
+		{
+			"path": "0013_Roman_to_Integer"
+		},
+		{
+			"path": "0014_Longest_Common_Prefix"
+		},
+		{
+			"path": "0015_3Sum"
 		}
-	]
+	],
+	"settings": {
+		"files.associations": {
+			"*.tcc": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"array": "cpp",
+			"initializer_list": "cpp",
+			"string_view": "cpp",
+			"utility": "cpp"
+		}
+	}
 }
