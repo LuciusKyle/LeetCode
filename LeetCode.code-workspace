@@ -44,6 +44,33 @@
 		},
 		{
 			"path": "0015_3Sum"
+		},
+		{
+			"path": "0016_3Sum_Closest"
+		},
+		{
+			"path": "0017_Letter_Combinations_of_a_Phone_Number"
+		},
+		{
+			"path": "0018_4Sum"
+		},
+		{
+			"path": "0019_Remove_Nth_Node_from_End_of_List"
+		},
+		{
+			"path": "0020_Valid_Parentheses"
+		},
+		{
+			"path": "0021_Merge_Two_Sorted_Lists"
+		},
+		{
+			"path": "0022_Generate_Parentheses"
+		},
+		{
+			"path": "0023_Merge_k_Sorted_Lists"
+		},
+		{
+			"path": "0024_Swap_Nodes_in_Pairs"
 		}
 	],
 	"settings": {
