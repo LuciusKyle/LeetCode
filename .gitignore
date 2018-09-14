@@ -333,3 +333,4 @@ ASALocalRun/
 *.exe
 a.out
 vscodedatabase/
+.vscode/
