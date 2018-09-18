@@ -2,6 +2,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include<assert.h>
 
 using std::stack;
 using std::string;
@@ -30,26 +31,9 @@ class Solution {
   }
 };
 
-int longestValidParentheses(const char* s) {
-  if (s == nullptr || s[0] == '\0') return 0;
-  int current_level = s[0] == '(' ? 1 : -1;
-  int current_length = current_level < 0 ? 0 : 1;
-  int max_length = 0;
-  int index = 1;
-  while (s[index] != '\0') {
-    if (current_length < 0) current_length = 0;
-    current_length += s[index] == '(' ? 1 : -1;
-    if (current_length == 0)
-      if (max_length < current_length) max_length = current_length;
-    ++index;
-  }
-
-  return max_length;
-}
-
 int main(void) {
   Solution sln;
-  sln.longestValidParentheses("()");
-  longestValidParentheses("(()");
+  int rtn = sln.longestValidParentheses("()");
+  assert(rtn == 2);
   return 0;
 }
