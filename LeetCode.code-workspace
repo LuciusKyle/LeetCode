@@ -101,6 +101,15 @@
 		},
 		{
 			"path": "0034_Find_First_and_Last_Position_of_Element_in_Sorted_Array"
+		},
+		{
+			"path": "0035_Search_Insert_Position"
+		},
+		{
+			"path": "0036_Valid_Sudoku"
+		},
+		{
+			"path": "0037_Sudoku_Solver"
 		}
 	],
 	"settings": {

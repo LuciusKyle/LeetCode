@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <vector>
 
 using std::vector;
@@ -28,6 +29,13 @@ int searchInsert(int* nums, int numsSize, int target) {
 int main(void) {
   int arr[] = {1, 3, 5, 6};
   int rtn = searchInsert(arr, std::end(arr) - std::begin(arr), 4);
+  assert(rtn == 2);
+  rtn = searchInsert(arr, std::end(arr) - std::begin(arr), 4);
+  assert(rtn == 2);
+  rtn = searchInsert(arr, std::end(arr) - std::begin(arr), 0);
+  assert(rtn == 0);
+  rtn = searchInsert(arr, std::end(arr) - std::begin(arr), 7);
+  assert(rtn == 4);
 
   return 0;
 }
