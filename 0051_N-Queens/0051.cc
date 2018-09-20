@@ -30,7 +30,7 @@ private:
 		const size_t edge_size = board.size();
 		for (size_t i = 0; i < edge_size; ++i) {
 			bool whole_line_is_invalid = true;
-			for (size_t ii = 0; ii < edge_size; ++ii) {
+			for (size_t ii = 0; ii < edge_size; ++ii)
 				if (board[i][ii] == '.' && (n != edge_size || solution_set[i][ii] != 'Q')) {
 					whole_line_is_invalid = false;
 					PutChessman(i, ii, board);
@@ -48,7 +48,6 @@ private:
 					}
 					RemoveChessman(i, ii, board);
 				}
-			}
 			if (whole_line_is_invalid)
 				return;
 		}
@@ -57,18 +56,14 @@ private:
 	void PutChessman(const size_t row, const size_t column, vector<string> &board) const {
 		const size_t edge_size = board.size();
 		for (size_t i = 0; i < edge_size; ++i) {
-			if (i < row && i < column) {
+			if (i <= row && i <= column)
 				++board[row - i][column - i];
-			}
-			if (row + i < edge_size && column + i < edge_size) {
+			if (row + i < edge_size && column + i < edge_size)
 				++board[row + i][column + i];
-			}
-			if (row + i < edge_size && i < column) {
+			if (row + i < edge_size && i <= column)
 				++board[row + i][column - i];
-			}
-			if (i < row && column + i < edge_size) {
+			if (i <= row && column + i < edge_size)
 				++board[row - i][column + i];
-			}
 			++board[row][i];
 			++board[i][column];
 		}
@@ -78,18 +73,14 @@ private:
 	void RemoveChessman(const size_t row, const size_t column, vector<string> &board) {
 		const size_t edge_size = board.size();
 		for (size_t i = 0; i < edge_size; ++i) {
-			if (i < row && i < column && '.' < board[row - i][column - i]) {
+			if (i <= row && i <= column && '.' < board[row - i][column - i])
 				--board[row - i][column - i];
-			}
-			if (row + i < edge_size && column + i < edge_size && '.' < board[row + i][column + i]) {
+			if (row + i < edge_size && column + i < edge_size && '.' < board[row + i][column + i])
 				--board[row + i][column + i];
-			}
-			if (row + i < edge_size && i < column && '.' < board[row + i][column - i]) {
+			if (row + i < edge_size && i <= column && '.' < board[row + i][column - i])
 				--board[row + i][column - i];
-			}
-			if (i < row && column + i < edge_size && '.' < board[row - i][column + i]) {
+			if (i <= row && column + i < edge_size && '.' < board[row - i][column + i])
 				--board[row - i][column + i];
-			}
 			if ('.' < board[row][i])
 				--board[row][i];
 			if ('.' < board[i][column])
