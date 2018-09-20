@@ -110,6 +110,42 @@
 		},
 		{
 			"path": "0037_Sudoku_Solver"
+		},
+		{
+			"path": "0038_Count_and_Say"
+		},
+		{
+			"path": "0039_Combination_Sum"
+		},
+		{
+			"path": "0040_Combination_Sum_II"
+		},
+		{
+			"path": "0041_First_Missing_Positive"
+		},
+		{
+			"path": "0042_Trapping_Rain_Water"
+		},
+		{
+			"path": "0043_Multiply_Strings"
+		},
+		{
+			"path": "0044_Wildcard_Matching"
+		},
+		{
+			"path": "0045_Jump_Game_II"
+		},
+		{
+			"path": "0046_Permutations"
+		},
+		{
+			"path": "0047_Permutations_II"
+		},
+		{
+			"path": "0048_Rotate_Image"
+		},
+		{
+			"path": "0049_Group_Anagrams"
 		}
 	],
 	"settings": {
