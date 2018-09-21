@@ -146,6 +146,24 @@
 		},
 		{
 			"path": "0049_Group_Anagrams"
+		},
+		{
+			"path": "0050_Pow(x,n)"
+		},
+		{
+			"path": "0051_N-Queens"
+		},
+		{
+			"path": "0052_N-Queens_II"
+		},
+		{
+			"path": "0053_Maximum_Subarray"
+		},
+		{
+			"path": "0054_Spiral_Matrix"
+		},
+		{
+			"path": "0055_Jump_Game"
 		}
 	],
 	"settings": {
