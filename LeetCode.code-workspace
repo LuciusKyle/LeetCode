@@ -164,6 +164,15 @@
 		},
 		{
 			"path": "0055_Jump_Game"
+		},
+		{
+			"path": "0056_Merge_Intervals"
+		},
+		{
+			"path": "0057_Insert_Interval"
+		},
+		{
+			"path": "0058_Length_of_Last_Word"
 		}
 	],
 	"settings": {
