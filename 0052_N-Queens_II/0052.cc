@@ -24,38 +24,26 @@ class Solution {
     return rtn;
   }
   int totalNQueens(const int n) {
-    vector<vector<string>> rtn;
-    if (n == 1) return 1;
-    for (size_t i = 0; i < n; ++i) {
-      vector<string> board(n, string(n, '.'));
-      PutChessman(0, i, board);
-      FillBoard(rtn, board, static_cast<size_t>(n - 1));
-    }
-    return static_cast<int>(rtn.size());
+    return static_cast<int>(solveNQueens(n).size());
   }
 
  private:
   void FillBoard(vector<vector<string>> &rtn, vector<string> &board,
                  const size_t n) {
     const size_t edge_size = board.size();
-    for (size_t i = edge_size - n; i < edge_size; ++i) {
-      bool whole_line_is_invalid = true;
-      for (size_t ii = 0; ii < edge_size; ++ii)
-        if (board[i][ii] == '.') {
-          whole_line_is_invalid = false;
-          PutChessman(i, ii, board);
-          if (n == 1) {
-            rtn.push_back(board);
-            for (size_t j = 0; j < edge_size; ++j)
-              for (size_t jj = 0; jj < edge_size; ++jj)
-                if (rtn.back()[j][jj] != 'Q') rtn.back()[j][jj] = '.';
-          } else {
-            FillBoard(rtn, board, n - 1);
-          }
-          RemoveChessman(i, ii, board);
-        }
-      if (whole_line_is_invalid) return;
-    }
+    for (size_t i = 0; i < edge_size; ++i)
+      if (board[edge_size - n][i] == '.') {
+        PutChessman(edge_size - n, i, board);
+        if (n == 1) {
+          rtn.push_back(board);
+          // don't need to push_back() completely correct chess board, the rtn container is only a counter in this problem. 
+          // for (size_t j = 0; j < edge_size; ++j)
+          //   for (size_t jj = 0; jj < edge_size; ++jj)
+          //     if (rtn.back()[j][jj] != 'Q') rtn.back()[j][jj] = '.';
+        } else
+          FillBoard(rtn, board, n - 1);
+        RemoveChessman(edge_size - n, i, board);
+      }
   }
 
   void PutChessman(const size_t row, const size_t column,
@@ -97,7 +85,7 @@ class Solution {
 
 int main(void) {
   Solution sln;
-  const auto rtn = sln.solveNQueens(8);
+  const auto rtn = sln.solveNQueens(10);
   for (const auto &board : rtn) {
     for (const auto &row : board) {
       for (const auto ch : row) cout << ch << '\t';
@@ -105,5 +93,6 @@ int main(void) {
     }
     cout << "\n\n";
   }
+  cout << "total NQueens: " << rtn.size();
   return 0;
 }
