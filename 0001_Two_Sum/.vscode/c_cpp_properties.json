@@ -3,9 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                "C:/MinGW-w64/posix/open_source_libs/boost/1_68_0/include",
-                "C:/MinGW-w64/posix/open_source_libs/Intel_TBB/tbb-2018_U5/include"
+                "${workspaceFolder}/**"
             ],
             "defines": [], 
             "browse": {
@@ -29,17 +27,7 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "${workspaceFolder}/**",
-                "~/Desktop/Data/CPP_libs/boost/boost_1_68_0_install/include",
-                "~/Desktop/Data/CPP_libs/FFmpeg/FFmpeg_4.0/include",
-                "~/Desktop/Data/CPP_libs/Intel_TBB/tbb-2018_U4/include",
-                "~/Desktop/Data/CPP_libs/LevelDB/1.21/include",
-                "~/Desktop/Data/CPP_libs/libevent/libevent-2.1.8-stable/include",
-                "~/Desktop/Data/CPP_libs/mysql/connector-c++-8.0/include",
-                "~/Desktop/Data/CPP_libs/OpenCV/4.0.0-pre/include",
-                "~/Desktop/Data/CPP_libs/OpenSSL/OpenSSL_1_1_1-pre8/include",
-                "~/Desktop/Data/CPP_libs/XZ_Utils/xz-5.3.1alpha/include",
-                "~/Desktop/Data/CPP_libs/zlib/1.2.11/include"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
