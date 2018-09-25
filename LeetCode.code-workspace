@@ -173,6 +173,21 @@
 		},
 		{
 			"path": "0058_Length_of_Last_Word"
+		},
+		{
+			"path": "0059_Spiral_Matrix_II"
+		},
+		{
+			"path": "0060_Permutation_Sequence"
+		},
+		{
+			"path": "0061_Rotate_List"
+		},
+		{
+			"path": "0062_Unique_Paths"
+		},
+		{
+			"path": "0063_Unique_Paths_II"
 		}
 	],
 	"settings": {
