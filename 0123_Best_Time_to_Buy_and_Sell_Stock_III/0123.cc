@@ -1,41 +1,62 @@
-#include<limits.h>
-#include<assert.h>
-#include<array>
+#include <assert.h>
+#include <limits.h>
+#include <vector>
 
-int maxProfit_Transaction(const int* prices, const int pricesSize) {
-	int min_price = INT_MAX;
-	int max_profit = 0;
-	for (int i = 0; i < pricesSize; ++i) {
-		if (prices[i] < min_price) min_price = prices[i];
-		if (max_profit < prices[i] - min_price)
-			max_profit = prices[i] - min_price;
-	}
-	return max_profit;
-}
+using std::vector;
 
-int maxProfit(const int* prices, const int pricesSize) {
-	int max_profit = 0;
-	for (int i = 0; i <= pricesSize; ++i) {
-		int profit = maxProfit_Transaction(prices + i, pricesSize - i) + maxProfit_Transaction(prices, i);
-		if (max_profit < profit)
-			max_profit = profit;
-	}
-	return max_profit;
-}
+class Solution {
+ public:
+  int maxProfit(const vector<int>& prices) {
+    if (prices.empty()) return 0;
+    int max_profit = 0;
+#if 201402L < __cplusplus
+    vector max_foresee_profit(prices.size(), prices.back());
+#else
+    vector<int> max_foresee_profit(prices.size(), prices.back());
+#endif
+    {
+      int max_price = INT_MIN;
+      for (int i = prices.size() - 1; i >= 0; --i) {
+        if (max_price < prices[i]) max_price = prices[i];
+        if (max_profit < max_price - prices[i])
+          max_profit = max_price - prices[i];
+        max_foresee_profit[i] = max_profit;
+      }
+    }
+    int max_profit_two_transactions = 0;
+    max_profit = 0;
+    int min_price = INT_MAX;
+    for (size_t i = 0; i < prices.size() - 1; ++i) {
+      if (prices[i] < min_price) min_price = prices[i];
+      if (max_profit < prices[i] - min_price)
+        max_profit = prices[i] - min_price;
+      if (max_profit_two_transactions < max_profit + max_foresee_profit[i])
+        max_profit_two_transactions = max_profit + max_foresee_profit[i];
+    }
+    return max_profit_two_transactions;
+  }
+};
 
 int main(void) {
-	const int arr0[] = { 3,3,5,0,0,3,1,4 };
-	assert(6 == maxProfit(arr0, std::end(arr0) - std::begin(arr0)));
+  Solution sln;
+  vector test_sample{3, 3, 5, 0, 0, 3, 1, 4};
 
-	const int arr1[] = { 7,6,4,3,1 };
-	assert(0 == maxProfit(arr1, std::end(arr1) - std::begin(arr1)));
+  assert(6 == sln.maxProfit(test_sample));
 
-	const int arr2[] = { 1,2 };
-	assert(1 == maxProfit(arr2, std::end(arr2) - std::begin(arr2)));
+  test_sample = {7, 6, 4, 3, 1};
+  assert(0 == sln.maxProfit(test_sample));
 
-	const int arr3[] = { 1 };
-	assert(0 == maxProfit(arr3, std::end(arr3) - std::begin(arr3)));
-	
-	assert(0 == maxProfit(nullptr, 0));
-	return 0;
+  test_sample = {1, 2};
+  assert(1 == sln.maxProfit(test_sample));
+
+  test_sample = {1};
+  assert(0 == sln.maxProfit(test_sample));
+
+  test_sample = vector<int>();
+  assert(0 == sln.maxProfit(test_sample));
+
+  test_sample = {1, 2, 4, 2, 5, 7, 2, 4, 9, 0};
+  assert(13 == sln.maxProfit(test_sample));
+
+  return 0;
 }
