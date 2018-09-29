@@ -1,29 +1,36 @@
 
-#include <set>
+#include <iostream>
 #include <string>
-#include <vector>
+#include <array>
+#include <assert.h>
 
-using std::multiset;
 using std::string;
-using std::vector;
+
+#if 201402L < __clpusplus
+constexpr std::array Alphabet_Chart{ '?', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+#else
+constexpr std::array<char, 27> Alphabet_Chart{ '?', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+#endif
 
 class Solution {
- public:
-  string largestNumber(const vector<int>& nums) {
-    multiset<string> str_set;
-    for (const int num : nums) {
-      str_set.insert(std::to_string(num));
-    }
-    string rtn;
-    for (auto set_criter = str_set.crbegin(); set_criter != str_set.crend();
-         ++set_criter)
-      rtn.append(*set_criter);
-    return rtn;
-  }
+public:
+	string convertToTitle(int n) {
+		string reverse_rtn;
+		while (n > 0) {
+			--n;
+			reverse_rtn.push_back(Alphabet_Chart[n % 26 + 1]);
+			n /= 26;
+		}
+		return { reverse_rtn.crbegin(), reverse_rtn.crend() };
+	}
 };
 
-int main(int argc, char const* argv[]) {
-  Solution sln;
-  auto rtn = sln.largestNumber({3, 30, 34, 5, 9});
-  return 0;
+int main(void)
+{
+	Solution sln;
+	for (int i = 1; i <= 100; ++i) {
+		std::cout << i << '\t' << sln.convertToTitle(i) << std::endl;
+	}
+	return 0;
 }
+
