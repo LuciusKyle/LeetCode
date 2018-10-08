@@ -9,13 +9,21 @@ constexpr std::array<uint32_t, 32> bit_by_bit{
     0x40000,    0x80000,   0x100000,  0x200000,  0x400000,   0x800000,
     0x1000000,  0x2000000, 0x4000000, 0x8000000, 0x10000000, 0x20000000,
     0x40000000, 0x80000000};
+
 class Solution {
  public:
   uint32_t reverseBits(const uint32_t n) {
     uint32_t rtn = 0;
-    for (size_t i = 0; i < bit_by_bit.size(); ++i) {
+    for (size_t i = 0; i < bit_by_bit.size(); ++i)
       if (bit_by_bit[i] & n) rtn |= bit_by_bit[31 - i];
-    }
+    return rtn;
+  }
+
+ private:
+  int hammingWeight(const uint32_t n) {
+    int rtn = 0;
+    for (const uint32_t b : bit_by_bit)
+      if (b & n) ++rtn;
     return rtn;
   }
 };
