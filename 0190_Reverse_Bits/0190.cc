@@ -1,7 +1,6 @@
 
+#include <assert.h>
 #include <array>
-#include <fstream>
-#include <iostream>
 
 constexpr std::array<uint32_t, 32> bit_by_bit{
     0x1,        0x2,       0x4,       0x8,       0x10,       0x20,
@@ -13,33 +12,25 @@ constexpr std::array<uint32_t, 32> bit_by_bit{
 
 class Solution {
  public:
-  int hammingWeight(const uint32_t n) {
-    int rtn = 0;
-    for (const uint32_t b : bit_by_bit)
-      if (b & n) ++rtn;
-    return rtn;
-  }
-
- private:
   uint32_t reverseBits(const uint32_t n) {
     uint32_t rtn = 0;
     for (size_t i = 0; i < bit_by_bit.size(); ++i)
       if (bit_by_bit[i] & n) rtn |= bit_by_bit[31 - i];
     return rtn;
   }
+
+ private:
+  int hammingWeight(const uint32_t n) {
+    int rtn = 0;
+    for (const uint32_t b : bit_by_bit)
+      if (b & n) ++rtn;
+    return rtn;
+  }
 };
 
-using std::cout;
-using std::endl;
-
 int main(int argc, char const *argv[]) {
-  // std::ofstream file("out.file");
-  // for(size_t i = 0;i<32;++i){
-  //   file<<std::hex<<(1<<i)<<endl;
-  // }
-
   Solution sln;
-  int rtn = sln.hammingWeight(11);
-
+  assert(964176192 == sln.reverseBits(43261596));
+  assert(43261596 == sln.reverseBits(964176192));
   return 0;
 }
