@@ -1,14 +1,19 @@
 
 #include <assert.h>
 #include <cmath>
+#include <vector>
 #include <fstream>
+
+using std::vector;
 
 class Solution {
  public:
   int countPrimes(const int n) {
     int rtn = 0;
+    vector<int> prime_numbers;
+    prime_numbers.reserve(n / 2);
     for (int i = 2; i < n; ++i) {
-      if (is_prime_number(i)) ++rtn;
+      if (is_prime_number(i, prime_numbers)) ++rtn;
     }
     return rtn;
   }
@@ -17,6 +22,18 @@ class Solution {
   bool is_prime_number(const int n) const {
     for (int i = 2; i <= sqrt(n); ++i)
       if (n % i == 0) return false;
+    return true;
+  }
+  bool is_prime_number(const int n, vector<int> &prime_numbers) const {
+    const int boundary = sqrt(n);
+    for (const int prime_number : prime_numbers) {
+      if (n % prime_number == 0) return false;
+      if (boundary < prime_number) {
+        prime_numbers.push_back(n);
+        return true;
+      }
+    }
+    prime_numbers.push_back(n);
     return true;
   }
 };
@@ -43,13 +60,30 @@ class Solution2 {
       if (n % i == 0) return false;
     return true;
   }
+  bool is_prime_number(const int n, vector<int> &prime_numbers) const {
+    const int boundary = sqrt(n);
+    for (const int prime_number : prime_numbers) {
+      if (n % prime_number == 0) return false;
+      if (boundary < prime_number) {
+        prime_numbers.push_back(n);
+        return true;
+      }
+    }
+    prime_numbers.push_back(n);
+    return true;
+  }
 };
 
 int main(void) {
   std::ofstream file("prime_number.file");
   Solution2 sln;
+  vector<int> nums;
   for (int i = 2; i < INT_MAX; ++i) {
-    if (sln.is_prime_number(i)) file << i << ",\n";
+    // if (sln.is_prime_number(i, nums)) file << i << ",\n";
+    sln.is_prime_number(i, nums);
+  }
+  for (const int num : nums) {
+    file << num << ",\n";
   }
   return 0;
 }
