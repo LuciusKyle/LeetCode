@@ -41,36 +41,31 @@ struct ListNode {
 	ListNode(int x) : val(x), next(nullptr) {}
 };
 class Solution {
-public:
-	ListNode * addTwoNumbers(ListNode* l1, ListNode* l2) {
-		auto node_1 = l1, node_2 = l2;
-		ListNode *header = nullptr;
-		ListNode *current_ptr = nullptr;
-		bool carry = false;
-		while (node_1 != nullptr || node_2 != nullptr || carry) {
-			int val = (node_1 == nullptr ? 0 : node_1->val) + (node_2 == nullptr ? 0 : node_2->val) + (carry ? 1 : 0);
-			if (val >= 10) {
-				carry = true;
-				val %= 10;
-			}
-			else {
-				carry = false;
-			}
-			auto node_ptr = new ListNode(val);
-			if (header == nullptr) {
-				header = node_ptr;
-				current_ptr = node_ptr;
-			}
-			else {
-				current_ptr->next = node_ptr;
-				current_ptr = node_ptr;
-			}
-
-			node_1 = node_1 == nullptr ? nullptr : node_1->next;
-			node_2 = node_2 == nullptr ? nullptr : node_2->next;
-		}
-		return header;
-	}
+ public:
+  ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+    ListNode *header = nullptr;
+    ListNode *current_ptr = nullptr;
+    int carry = 0;
+    while (l1 != nullptr || l2 != nullptr || carry) {
+      const int val = (l1 == nullptr ? 0 : l1->val) + (l2 == nullptr ? 0 : l2->val) + carry;
+      carry = val / 10;
+      auto node_ptr = new ListNode(val % 10);
+      if (header == nullptr) {
+        header = new ListNode(val % 10);
+        current_ptr = header;
+      } else {
+        current_ptr->next = new ListNode(val % 10);
+        current_ptr = current_ptr->next;
+      }
+      if (l1 != nullptr) {
+        l1 = l1->next;
+      }
+      if (l2 != nullptr) {
+        l2 = l2->next;
+      }
+    }
+    return header;
+  }
 };
 
 void distroy_list(ListNode *node)
