@@ -53,7 +53,12 @@ class Solution {
 int main(void) {
   Solution sln;
   auto rtn = sln.longestPalindrome("abaqwerabcfcba");
-	rtn = sln.longestPalindrome("abaqwerabba");
-	rtn = sln.longestPalindrome("abaqweraa");
+  rtn = sln.longestPalindrome("abaqwerabba");
+  rtn = sln.longestPalindrome("abaqweraa");
+  rtn = sln.longestPalindrome("a");
+  rtn = sln.longestPalindrome("");
+  rtn = sln.longestPalindrome("ab");
+  rtn = sln.longestPalindrome("cbbd");
+
   return 0;
 }
