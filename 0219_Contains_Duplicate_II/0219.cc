@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include <unordered_set>
 #include <vector>
 
@@ -20,9 +21,9 @@ class Solution {
 
 int main(void) {
   Solution sln;
-  bool rtn = sln.containsNearbyDuplicate({1, 2, 3, 1}, 3);
-  rtn = sln.containsNearbyDuplicate({1, 0, 1, 1}, 1);
-  rtn = sln.containsNearbyDuplicate({1, 2, 3, 1, 2, 3}, 1);
+  assert(sln.containsNearbyDuplicate({1, 2, 3, 1}, 3));
+  assert(sln.containsNearbyDuplicate({1, 0, 1, 1}, 1));
+  assert(!sln.containsNearbyDuplicate({1, 2, 3, 1, 2, 3}, 1));
 
   return 0;
 }
