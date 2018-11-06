@@ -15,11 +15,11 @@ class Solution {
       const auto insertion_result = num_set.insert(nums[i]);
       auto next_iter = insertion_result;
       next_iter++;
-      if (next_iter != num_set.end() && *next_iter - nums[i] <= t)
+      if (next_iter != num_set.end() && static_cast<long long>(*next_iter) - nums[i] <= static_cast<long long>(t))
         return true;
       auto pre_iter = insertion_result;
       --pre_iter;
-      if (insertion_result != pre_iter && pre_iter != num_set.end() && nums[i] - *pre_iter <= t)
+      if (insertion_result != pre_iter && pre_iter != num_set.end() && static_cast<long long>(nums[i]) - static_cast<long long>(*pre_iter) <= static_cast<long long>(t))
         return true;
     }
     return false;
@@ -32,5 +32,6 @@ int main(void) {
   assert(sln.containsNearbyAlmostDuplicate({1, 0, 1, 1}, 1, 2));
   assert(!sln.containsNearbyAlmostDuplicate({1, 5, 9, 1, 5, 9}, 2, 3));
   assert(!sln.containsNearbyAlmostDuplicate({-1, 2147483647}, 1, 2147483647));
+  assert(!sln.containsNearbyAlmostDuplicate({2147483647,-2147483647}, 1, 2147483647));
   return 0;
 }
