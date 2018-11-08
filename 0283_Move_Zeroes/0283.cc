@@ -8,16 +8,13 @@ class Solution {
   void moveZeroes(vector<int> &nums) {
     size_t cur_index = 0;
     for (size_t i = 0; i < nums.size(); ++i) {
-      if (nums[cur_index] == 0) {
+      if (nums[cur_index] == 0)
         if (cur_index != i) {
           nums[cur_index] ^= nums[i];
           nums[i] ^= nums[cur_index];
           nums[cur_index] ^= nums[i];
         }
-      }
-      if (nums[cur_index] != 0) {
-        ++cur_index;
-      }
+      if (nums[cur_index] != 0) ++cur_index;
     }
   }
 };
