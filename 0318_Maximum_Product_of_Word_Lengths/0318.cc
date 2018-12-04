@@ -1,9 +1,9 @@
 
-#include <set>
+#include <array>
 #include <string>
 #include <vector>
 
-using std::set;
+using std::array;
 using std::string;
 using std::vector;
 
@@ -12,12 +12,15 @@ class Solution {
   int maxProduct(const vector<string>& words) {
     int rtn = 0;
     for (auto iter = words.cbegin(); iter != words.cend(); ++iter) {
-      const set<char> this_word(iter->cbegin(), iter->cend());
+      array<char, 26> charactor_dict{0};
+      for (const auto ch : *iter) {
+        charactor_dict[ch - 'a'] = 1;
+      }
       for (auto inner_inter = iter; inner_inter != words.cend();
            ++inner_inter) {
         bool no_common_letters = true;
         for (const auto ch : *inner_inter) {
-          if (this_word.find(ch) != this_word.end()) {
+          if (charactor_dict[ch - 'a'] == 1) {
             no_common_letters = false;
             break;
           }
