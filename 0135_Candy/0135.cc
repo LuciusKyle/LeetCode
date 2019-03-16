@@ -32,5 +32,7 @@ int main(void) {
   assert(5 == sln.candy({1, 0, 2}));
   assert(4 == sln.candy({1, 1, 2}));
   assert(4 == sln.candy({1, 2, 2}));
+  assert(7 == sln.candy({1, 3, 2, 2, 1}));
   return 0;
 }
+
