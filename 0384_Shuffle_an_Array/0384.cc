@@ -10,7 +10,7 @@ using std::vector;
 
 class Solution {
  public:
-  Solution(const vector<int> nums) : original_vec_(nums) {
+  Solution(const vector<int> nums) : original_vec_(nums), shuffled_vec_(nums) {
     // assert(!original_vec_.empty());
     // leetcode's test sample contains an empty vector;
   }
@@ -21,20 +21,20 @@ class Solution {
   /** Returns a random shuffling of the array. */
   vector<int> shuffle() {
     if (original_vec_.empty()) return original_vec_;
-    auto rtn = original_vec_;
-    for (size_t i = rtn.size() - 1; i != 0; --i) {
+    for (size_t i = shuffled_vec_.size() - 1; i != 0; --i) {
       const size_t random_index = int_dist(rd) % (i + 1);
       if (random_index != i) {
-        rtn[i] ^= rtn[random_index];
-        rtn[random_index] ^= rtn[i];
-        rtn[i] ^= rtn[random_index];
+        shuffled_vec_[i] ^= shuffled_vec_[random_index];
+        shuffled_vec_[random_index] ^= shuffled_vec_[i];
+        shuffled_vec_[i] ^= shuffled_vec_[random_index];
       }
     }
-    return rtn;
+    return shuffled_vec_;
   }
 
  private:
   const vector<int> original_vec_;
+  vector<int> shuffled_vec_;
   std::random_device rd;
   std::uniform_int_distribution<size_t> int_dist;
 };
