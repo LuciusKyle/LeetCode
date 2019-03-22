@@ -5,23 +5,20 @@
 // Definition for a binary tree node.
 struct TreeNode {
   int val;
-  TreeNode *left;
-  TreeNode *right;
+  TreeNode* left;
+  TreeNode* right;
   TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
  public:
-  bool isValidBST(TreeNode *root) {
-    if (root == nullptr) return true;
-    return isValidNode(root->left, INT_MIN, root->val) && isValidNode(root->right, root->val, INT_MAX);
-  }
+  bool isValidBST(TreeNode* root) { return isValidBST(root, nullptr, nullptr); }
 
  private:
-  bool isValidNode(TreeNode *node, const int min_val, const int max_val) {
-    if (node == nullptr) return true;
-    if (node->val < max_val && min_val < node->val)
-      return isValidNode(node->left, min_val, node->val) && isValidNode(node->right, node->val, max_val);
+  bool isValidBST(TreeNode* root, TreeNode* minNode, TreeNode* maxNode) {
+    if (!root) return true;
+    if ((minNode == nullptr || minNode->val < root->val) && (maxNode == nullptr || root->val < maxNode->val))
+      return isValidBST(root->left, minNode, root) && isValidBST(root->right, root, maxNode);
     else
       return false;
   }
