@@ -1,8 +1,11 @@
 
+
+#include <assert.h>
 #include <limits.h>
 #include <random>
 
 // Definition for singly-linked list.
+
 struct ListNode {
   int val;
   ListNode* next;
@@ -12,15 +15,15 @@ struct ListNode {
 class Solution {
  public:
   ListNode* sortList(ListNode* head) {
-    ListNode *mid_ptr = head;
-    ListNode *temp_ptr = head;
+    ListNode* mid_ptr = head;
+    ListNode* temp_ptr = head == nullptr ? nullptr : head->next;
     size_t list_length = 0;
-    while (temp_ptr !=nullptr) {
-      if ((list_length & size_t(0x1)) == 0) mid_ptr = mid_ptr->next;
+    while (temp_ptr != nullptr) {
+      if ((list_length & size_t(0x1)) == 1) mid_ptr = mid_ptr->next;
       temp_ptr = temp_ptr->next;
       ++list_length;
     }
-    if(list_length < 2) return head;
+    if (list_length == 0) return head;
     temp_ptr = mid_ptr->next;
     mid_ptr->next = nullptr;
     return mergeTwoLists(sortList(head), sortList(temp_ptr));
@@ -51,16 +54,30 @@ int main(void) {
   ListNode head(0);
   std::random_device rd;
   std::uniform_int_distribution<int> dist(-10000, 10000);
-  ListNode *temp_ptr = &head;
-  for(size_t i = 0;i<1000;++i){
+  ListNode* temp_ptr = &head;
+  for (size_t i = 0; i < 10000000; ++i) {
     temp_ptr->next = new ListNode(dist(rd));
+    // temp_ptr->next = new ListNode(int(i));
     temp_ptr = temp_ptr->next;
   }
 
+  //{
+  //       auto ptr3 = head.next->next->next;
+  //       auto ptr2 = head.next->next;
+  //       auto ptr1 = head.next;
+  //       ptr2->next = ptr1;
+  //       ptr1->next = ptr3;
+  //       head.next = ptr2;
+  //}
+
   Solution sln;
-  sln.sortList(&head);
+  ListNode* rtn = sln.sortList(head.next);
 
-
+  while (rtn != nullptr) {
+    ListNode* temp_ptr = rtn;
+    rtn = rtn->next;
+    assert(rtn == nullptr || temp_ptr->val <= rtn->val);
+    delete temp_ptr;
+  }
   return 0;
 }
-
