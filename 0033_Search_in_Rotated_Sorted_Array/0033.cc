@@ -17,11 +17,12 @@ class Solution {
           upper_index = mid_index;
         else
           lower_index = mid_index;
-      else  // right part is sorted.
-          if (nums[mid_index] <= target && target <= nums[upper_index])
-        lower_index = mid_index;
-      else
-        upper_index = mid_index;
+      else {  // right part is sorted.
+        if (nums[mid_index] <= target && target <= nums[upper_index])
+          lower_index = mid_index;
+        else
+          upper_index = mid_index;
+      }
     }
     if (nums[lower_index] == target)
       return int(lower_index);
