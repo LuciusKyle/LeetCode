@@ -16,23 +16,18 @@ struct TreeNode {
 class Solution {
  public:
   TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-    vector<TreeNode*> pre_order_traversal;
-    preOrderTraversal(root, pre_order_traversal, p, q);
-    set<TreeNode*> in_order_traversal;
-    inOrderTraversal(root, in_order_traversal, p, q, false);
-    for (int i = pre_order_traversal.size() - 1; 0 <= i; --i)
-      if (in_order_traversal.find(pre_order_traversal[i]) != in_order_traversal.end())
-        return pre_order_traversal[i];
+    vector<TreeNode*> first_traversal;
 
     return nullptr;
   }
 
  private:
-  void preOrderTraversal(TreeNode* node, vector<TreeNode *>& pre_order_traversal, const TreeNode* p, const TreeNode* q) {
-    if (node == nullptr || node == p || node == q) return;
-    pre_order_traversal.push_back(node);
-    preOrderTraversal(node->left, pre_order_traversal, p, q);
-    preOrderTraversal(node->right, pre_order_traversal, p, q);
+  int preOrderTraversal(TreeNode* node, vector<TreeNode *>& ptr_vec, const TreeNode* p, const TreeNode* q, int count) {
+    if (node == nullptr) return;
+    if (node->left == p || node->right == q)
+    ptr_vec.push_back(node);
+    preOrderTraversal(node->left, ptr_vec, p, q, count);
+    preOrderTraversal(node->right, ptr_vec, p, q, count);
   }
 
   void inOrderTraversal(TreeNode* node, set<TreeNode *>& in_order_traversal, const TreeNode* p, const TreeNode* q, bool start_record) {
