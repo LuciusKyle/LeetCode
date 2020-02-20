@@ -1,39 +1,44 @@
 
-#include <set>
+#include <limits.h>
+#include <chrono>
+#include <iostream>
+#include <map>
 #include <vector>
 
-using std::multiset;
+using std::multimap;
 using std::vector;
 
 class Solution {
  public:
   vector<int> countSmaller(const vector<int>& nums) {
-    vector<int> result(nums.size(), 0);
-    multiset<int> nums_set;
-    for (int i = nums.size() - 1; i >= 0; --i) {
-      nums_set.insert(nums[i]);
-      auto iter = nums_set.lower_bound(nums[i]);
-      int count = 0;
-      while (iter != nums_set.begin()) {
-        --iter;
-        ++count;
+    vector<int> rtn(nums.size());
+    int max_num = INT_MIN;
+    for (int i = rtn.size() - 1; 0 <= i; --i) {
+      if (max_num < nums[i]) {
+        rtn[i] = rtn.size() - 1 - i;
+        max_num = nums[i];
+        continue;
       }
-      result[i] = count;
+      int count = 0;
+      for (int ii = i + 1; ii < rtn.size(); ++ii)
+        if (nums[ii] < nums[i])
+          count++;
+        else if (nums[ii] == nums[i]) {
+          count += rtn[ii];
+          break;
+        }
+      rtn[i] = count;
     }
-    return result;
+    return rtn;
   }
 };
 
 int main(const int argc, char const* argv[]) {
-  const multiset test_set{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  auto iter = test_set.lower_bound(0);
-
-  while (iter != test_set.begin()) {
-    --iter;
-  }
-
   Solution sln;
+  auto rtn1 = sln.countSmaller({0, 2, 1});
   auto rtn = sln.countSmaller({5, 2, 6, 1});
+
+  auto start = std::chrono::system_clock::now();
   rtn = sln.countSmaller(
       {5183, 2271, 3067, 539,  8939, 2999, 9264, 737,  3974, 5846, -210, 9278,
        5800, 2675, 6608, 1133, -1,   6018, 9672, 5179, 9842, 7424, -209, 2988,
@@ -1871,5 +1876,10 @@ int main(const int argc, char const* argv[]) {
        9037, 2919, 278,  9616, 2577, 9058, 1199, 2105, 3820, 7592, 4061, 9723,
        9083, 1644, 2201, 216,  7158, 1300, 1485, 2438, 6431, 3945, 9539, 8608,
        9383, 4757, 1675, 3448, 3436, 6238, 7946, -369, -693, 1382, 9774});
+  std::cout << "time: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::system_clock::now() - start)
+                   .count()
+            << " milliseconds" << std::endl;
   return 0;
 }
