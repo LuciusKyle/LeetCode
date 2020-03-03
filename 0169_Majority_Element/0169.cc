@@ -1,23 +1,14 @@
 
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
+#include <algorithm>
 
-using std::unordered_map;
-using std::unordered_multiset;
 using std::vector;
 
 class Solution {
  public:
-  int majorityElement(const vector<int>& nums) {
-    unordered_multiset<int> nums_set;
-    nums_set.reserve(nums.size());
-    const size_t bottle_neck_size = nums.size() / 2;
-    for (const int num : nums) {
-      nums_set.insert(num);
-      if (bottle_neck_size < nums_set.count(num)) return num;
-    }
-    return 0;
+  int majorityElement(vector<int>& nums) {
+    std::sort(nums.begin(), nums.end());
+    return nums[nums.size() / 2];
   }
 };
 
