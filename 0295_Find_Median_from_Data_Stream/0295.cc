@@ -16,27 +16,24 @@ class MedianFinder {
     if (smaller_nums_.empty() || num < *smaller_nums_.crbegin()) {
       smaller_nums_.insert(num);
       if (greater_nums_.size() < smaller_nums_.size() && (1 < smaller_nums_.size() - greater_nums_.size())) {
-        const int max_of_smaller = *smaller_nums_.crbegin();
+        greater_nums_.insert(*smaller_nums_.crbegin());
         smaller_nums_.erase(--smaller_nums_.end());
-        greater_nums_.insert(max_of_smaller);
       }
     } else {
       greater_nums_.insert(num);
       if (smaller_nums_.size() < greater_nums_.size() && (1 < greater_nums_.size() - smaller_nums_.size())) {
-        const int min_of_greater = *greater_nums_.cbegin();
+        smaller_nums_.insert(*greater_nums_.cbegin());
         greater_nums_.erase(greater_nums_.begin());
-        smaller_nums_.insert(min_of_greater);
       }
     }
-    assert(smaller_nums_.size() + greater_nums_.size() == debug_count);
   }
 
   double findMedian() {
-    if (greater_nums_.empty() && smaller_nums_.empty()) abort();
+    // if (greater_nums_.empty() && smaller_nums_.empty()) abort(); // LeetCode don't test this.
     if (greater_nums_.empty()) return double(*smaller_nums_.cbegin());
     if (smaller_nums_.empty()) return double(*greater_nums_.cbegin());
     if (smaller_nums_.size() == greater_nums_.size())
-      return double(*greater_nums_.cbegin()) / 2 + double(*smaller_nums_.crbegin()) / 2;
+      return (double(*greater_nums_.cbegin()) + *smaller_nums_.crbegin()) / 2;
     else
       return greater_nums_.size() < smaller_nums_.size() ? *smaller_nums_.crbegin() : *greater_nums_.cbegin();
   }
