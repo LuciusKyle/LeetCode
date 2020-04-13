@@ -37,7 +37,7 @@ class Solution1 {
 };
 
 // 5% beat.
-class Solution {
+class Solution2 {
  public:
   int findMaxForm(const vector<string>& strs, int m, int n) {
     vector<unordered_map<size_t, int>> result(strs.size());
@@ -59,6 +59,25 @@ class Solution {
     const int not_form_current = findMaxForm(strs, zero, one, index + 1, result);
     map_ref.insert({key_val, form_current < not_form_current ? not_form_current : form_current});
     return form_current < not_form_current ? not_form_current : form_current;
+  }
+};
+
+// copy from others. 95% beat.
+class Solution {
+ public:
+  int findMaxForm(const vector<string>& strs, int m, int n) {
+    // vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    int* dp = new int[(m + 1) * (n + 1)]{0};
+    for (string str : strs) {
+      int zeros = 0, ones = 0;
+      for (char c : str) if (c == '0') ++zeros; else ++ones;
+      for (int i = m; i >= zeros; --i)
+        for (int j = n; j >= ones; --j)
+          dp[i * (n + 1) + j] = std::max(dp[i * (n + 1) + j], dp[(i - zeros) * (n + 1) + j - ones] + 1);
+    }
+    int rtn = dp[m * (n + 1) + n];
+    delete[] dp;
+    return rtn;
   }
 };
 
