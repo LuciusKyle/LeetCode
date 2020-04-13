@@ -8,27 +8,29 @@ using std::vector;
 class Solution {
  public:
   int findTargetSumWays(const vector<int>& nums, int S) {
+    if (nums.empty()) return 0;
     vector<unordered_map<int, int>> result(nums.size());
-    return findTargetSumWays(nums, 0, S, result);
-  }
+    result[0].insert({nums[0], nums[0] == 0 ? 2 : 1});
+    result[0].insert({nums[0] * -1, 1});
+    for (int i = 1; i < nums.size(); ++i) 
+      for (auto iter = result[i - 1].cbegin(); iter != result[i - 1].cend(); iter++) {
+        if (result[i].count(iter->first + nums[i]) != 0)
+          result[i].at(iter->first + nums[i]) += iter->second;
+        else
+          result[i].insert({iter->first + nums[i], iter->second});
+        if (result[i].count(iter->first - nums[i]) != 0)
+          result[i].at(iter->first - nums[i]) += iter->second;
+        else
+          result[i].insert({iter->first - nums[i], iter->second});
+      }
 
- private:
-  int findTargetSumWays(const vector<int> &nums, const size_t cur_index, const int target, vector<unordered_map<int, int>> &result) {
-    if (nums.size() - cur_index == 1) {
-      int rtn = 0;
-      if (nums[cur_index] * -1 == target) ++rtn;
-      if (nums[cur_index] == target) ++rtn;
-      return rtn;
-    }
-    if (result[cur_index].count(target) != 0) return result[cur_index].at(target);
-    const int rtn = findTargetSumWays(nums, cur_index + 1, target + nums[cur_index], result) + findTargetSumWays(nums, cur_index + 1, target - nums[cur_index], result);
-    result[cur_index].insert({target, rtn});
-    return rtn;
+    return result[nums.size() - 1].count(S) == 0 ? 0 : result[nums.size() - 1].at(S);
   }
 };
 
 int main(void) {
-
+  Solution sln;
+  int rtn = sln.findTargetSumWays({1, 1, 1, 1, 1}, 3);
+  rtn = sln.findTargetSumWays({0, 0, 0, 0, 0, 0, 0, 0, 1}, 1);
   return 0;
 }
-
