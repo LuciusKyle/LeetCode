@@ -1,28 +1,28 @@
 
-#include <vector>
+#include <chrono>
+#include <iostream>
 #include <unordered_map>
+#include <vector>
 
-using std::unordered_multimap;
+using std::unordered_map;
 using std::vector;
 
 class Solution {
  public:
   int findMaxLength(const vector<int>& nums) {
-    vector<int> diffs(nums.size(), 0);
+    unordered_map<int, int> result;
     int rtn = 0;
-    for (int i = 0, z = 0, o = 0; i < nums.size(); ++i) {
-      if (nums[i] == 0) ++z;
-      else ++o;
-      diffs[i] = o - z;
-      if (o - z == 0) rtn = i + 1;
-    }
-
-    for (int i = 1; i < nums.size(); ++i) {
-      if (rtn != 0 && nums.size() < i + rtn)
-        return rtn;
-      for (int j = i + rtn; j < nums.size(); ++j)
-        if (diffs[j] == diffs[i - 1])
-          rtn = j - i + 1;
+    for (int i = 0, diff = 0; i < nums.size(); ++i) {
+      if (nums[i] == 0) ++diff;
+      else --diff;
+      if (diff == 0) {
+        if (rtn < i + 1) rtn = i + 1;
+        continue;
+      }
+      if (result.count(diff) != 0) {
+        if (rtn < i - result.at(diff)) rtn = i - result.at(diff);
+      } else
+        result.insert({diff, i});
     }
     return rtn;
   }
@@ -34,7 +34,9 @@ int main(void) {
   rtn = sln.findMaxLength({0, 0, 1, 0, 0, 0, 1, 1});
   rtn = sln.findMaxLength({0, 1, 0, 0, 1, 0});
 
+  auto start = std::chrono::system_clock::now();
 
+  start = std::chrono::system_clock::now();
   rtn = sln.findMaxLength(
       {0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,
@@ -2120,5 +2122,11 @@ int main(void) {
        1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
        0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1,
        0, 1, 1, 1, 0, 0, 1, 0});
+
+  std::cout << "time: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::system_clock::now() - start)
+                   .count()
+            << " milliseconds" << std::endl;
   return 0;
 }
