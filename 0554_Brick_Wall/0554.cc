@@ -12,31 +12,30 @@ using std::vector;
 class Solution {
  public:
   int leastBricks(const vector<vector<int>>& wall) {
-    vector<std::pair<int, int>> pre_wall;
+    vector<std::array<int, 2>> pre_wall;
     const int wall_hight = std::accumulate(wall[0].cbegin(), wall[0].cend(), 0);
     for (int i = 0; i < wall.size(); ++i) {
-      int pos = 0;
-      auto iter = pre_wall.cbegin();
-      vector<std::pair<int, int>> cur_wall;
+      int pos = 0, it = 0;
+      vector<std::array<int, 2>> cur_wall;
       for (int j = 0; j < wall[i].size(); ++j) {
-        pos += wall[i][j];
-        while (iter != pre_wall.cend() && iter->first < pos) {
-          cur_wall.push_back({iter->first, iter->second + 1});
-          ++iter;
+        pos += wall[i][j];        
+        while (it != pre_wall.size() && pre_wall[it][0] < pos) {
+          cur_wall.push_back({pre_wall[it][0], pre_wall[it][1] + 1});
+          ++it;
         }
 
-        if (iter != pre_wall.cend() && iter->first == pos) {
-          cur_wall.push_back({pos, iter->second});
-          ++iter;
+        if (it != pre_wall.size() && pre_wall[it][0] == pos) {
+          cur_wall.push_back({pos, pre_wall[it][1]});
+          ++it;
         } else
           cur_wall.push_back({pos, i});
       }
       pre_wall = cur_wall;
     }
     int minBrick = INT_MAX;
-    if (pre_wall.size() == 1 && pre_wall[0].first == wall_hight) minBrick = wall.size();
+    if (pre_wall.size() == 1 && pre_wall[0][0] == wall_hight) minBrick = wall.size();
     for (const auto& val : pre_wall)
-      if (val.second < minBrick) minBrick = val.first == wall_hight ? minBrick : val.second;
+      if (val[1] < minBrick) minBrick = val[0] == wall_hight ? minBrick : val[1];
     return minBrick;
   }
 };
