@@ -10,13 +10,10 @@ using std::vector;
 class Solution {
  public:
   vector<int> constructRectangle(const int area) {
-    double w = sqrt(area);
-    int l = w;
-    while (l < area && 0.0000001 < w - int(w)) {
-      ++l;
-      w = double(area) / l;
-    }
-    return {l, int(w)};
+    for (int i = sqrt(area); i > 0; --i)
+      if (area % i == 0) return {area / i, i};
+
+    return {area, 1};
   }
 };
 
