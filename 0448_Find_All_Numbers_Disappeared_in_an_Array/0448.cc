@@ -23,6 +23,14 @@ class Solution {
 class Solution1 {
  public:
   vector<int> findDisappearedNumbers(const vector<int>& nums) {
+    if (nums.size() < 0x200) {
+      vector<int> temp(nums.size());
+      for (const int num : nums) temp[num - 1] = 1;
+      vector<int> rtn;
+      for (size_t i = 0; i < temp.size(); ++i)
+        if (temp[i] == 0) rtn.push_back(i + 1);
+      return rtn;
+    }
     vector<int> temp(nums.size());
     tbb::parallel_for(tbb::blocked_range<size_t>(0, nums.size()),
                       [&temp, &nums](const tbb::blocked_range<size_t>& r) {
