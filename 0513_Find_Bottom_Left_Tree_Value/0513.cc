@@ -14,19 +14,21 @@ struct TreeNode {
 
 class Solution {
  public:
+  Solution() : max_depth_(-1), left_val_(0) {}
   int findBottomLeftValue(TreeNode *root) {
-    vector<TreeNode *> pre_row(1, root);
-    vector<TreeNode *> next_row;
-    if (root->left != nullptr) next_row.push_back(root->left);
-    if (root->right != nullptr) next_row.push_back(root->right);
-    while (!next_row.empty()) {
-      pre_row.swap(next_row);
-      next_row.clear();
-      for (const TreeNode *ptr : pre_row) {
-        if (ptr->left != nullptr) next_row.push_back(ptr->left);
-        if (ptr->right != nullptr) next_row.push_back(ptr->right);
-      }
-    }
-    return pre_row[0]->val;
+    findBottomLeftValue(root, 0);
+    return left_val_;
   }
+
+ private:
+  void findBottomLeftValue(const TreeNode *node, const int depth) {
+    if (max_depth_ < depth) {
+      max_depth_ = depth;
+      left_val_ = node->val;
+    }
+    if (node->left != nullptr) findBottomLeftValue(node->left, depth + 1);
+    if (node->right != nullptr) findBottomLeftValue(node->right, depth + 1);
+  }
+  int max_depth_;
+  int left_val_;
 };
