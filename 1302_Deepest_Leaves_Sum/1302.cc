@@ -16,18 +16,16 @@ struct TreeNode {
 class Solution {
  public:
   int deepestLeavesSum(TreeNode *root) {
-    vector<TreeNode *> cur_level(1, root), pre_level;
-    do {
-      pre_level.clear();
-      for (const TreeNode *ptr : cur_level) {
-        if (ptr->left != nullptr) pre_level.push_back(ptr->left);
-        if (ptr->right != nullptr) pre_level.push_back(ptr->right);
-      }
-      std::swap(cur_level, pre_level);
-    } while (!cur_level.empty());
-    int sum = 0;
-    for (const TreeNode *ptr : pre_level)
-      sum += ptr->val;
-    return sum;
+    deepestLeavesSum(root, 0);
+    return answer_cache_.back();
   }
+
+ private:
+  void deepestLeavesSum(const TreeNode *node, const size_t depth) {
+    if (answer_cache_.size() <= depth) answer_cache_.push_back(0);
+    answer_cache_[depth] += node->val;
+    if (node->left) deepestLeavesSum(node->left, depth + 1);
+    if (node->right) deepestLeavesSum(node->right, depth + 1);
+  }
+  vector<int> answer_cache_;
 };
