@@ -7,20 +7,17 @@
 #include <array>
 #include <bitset>
 #include <iostream>
+#include <set>
 
 using std::cout;
 using std::endl;
 
 constexpr std::array kAllPowerOfFour{1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216, 67108864, 268435456, 1073741824};
+const std::set kAllPowerOfFourSet(kAllPowerOfFour.cbegin(), kAllPowerOfFour.cend());
 
-constexpr int negative_mask = ~3;
 class Solution {
  public:
-  bool isPowerOfFour(int num) {
-    for (const int n:kAllPowerOfFour)
-      if (n == num) return true;
-    return false;
-  }
+  bool isPowerOfFour(int num) { return kAllPowerOfFourSet.count(num); }
 };
 
 int main(int argc, char const *argv[]) {
