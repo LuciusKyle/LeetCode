@@ -1,11 +1,11 @@
 
 #include <map>
 #include <numeric>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 using std::map;
-using std::unordered_map;
+using std::unordered_set;
 using std::vector;
 
 class Solution {
@@ -15,43 +15,20 @@ class Solution {
     const int target = sum / 2;
     if (target * 2 != sum) return false;
 
-    answer_cache_.assign(nums.size(), unordered_map<int, bool>());
-    // vector<unordered_map<int, bool>>answer_cache(nums.size());
-    return canPartition(nums, 0, target);
-  }
-
- private:
-  bool canPartition(const vector<int>& nums, const size_t cur_index, const int target) {
-    if (answer_cache_[cur_index].count(target)) return answer_cache_[cur_index].at(target);
-    if (cur_index == nums.size() - 1)
-      return target == 0 || target == nums.back();
-    if (target == 0)
-      return true;
-    if (target < 0) {
-      answer_cache_[cur_index].insert({target, false});
-      return false;
+    unordered_set<int> current_level;
+    current_level.insert(0);
+    for (const int num : nums) {
+      unordered_set<int> next_level;
+      next_level.reserve(current_level.size() * 2);
+      for (const int sum : current_level) {
+        if (sum + num == target) return true;
+        next_level.insert(sum);
+        next_level.insert(sum + num);
+      }
+      std::swap(current_level, next_level);
     }
-    bool result = canPartition(nums, cur_index + 1, target) || canPartition(nums, cur_index + 1, target - nums[cur_index]);
-    answer_cache_[cur_index].insert({target, result});
-    return result;
+    return false;
   }
-  
-  bool canPartition(const vector<int>& nums, const size_t cur_index, const int target, vector<unordered_map<int, bool>>& answer_cache) {
-    if (answer_cache[cur_index].count(target)) return answer_cache[cur_index].at(target);
-    if (cur_index == nums.size() - 1)
-      return target == 0 || target == nums.back();
-    if (target == 0)
-      return true;
-    if (target < 0) {
-      answer_cache[cur_index].insert({target, false});
-      return false;
-    }
-    bool result = canPartition(nums, cur_index + 1, target, answer_cache) || canPartition(nums, cur_index + 1, target - nums[cur_index], answer_cache);
-    answer_cache[cur_index].insert({target, result});
-    return result;
-  }
-
-  vector<unordered_map<int, bool>> answer_cache_;
 };
 
 int main(void) {
