@@ -1,41 +1,44 @@
 
-#include<vector>
-#include<algorithm>
+#include <assert.h>
+
+#include <algorithm>
+#include <vector>
 
 using std::vector;
 
+// O(n) solution.
 class Solution {
-private:
-	int getkth(int s[], int m, int l[], int n, int k) {
-		// let m <= n
-		if (m > n)
-			return getkth(l, n, s, m, k);
-		if (m == 0)
-			return l[k - 1];
-		if (k == 1)
-			return std::min(s[0], l[0]);
-
-		int i = std::min(m, k / 2), j = std::min(n, k / 2);
-		if (s[i - 1] > l[j - 1])
-			return getkth(s, m, l + j, n - j, k - j);
-		else
-			return getkth(s + i, m - i, l, n, k - i);
-		return 0;
-	}
-
-	double findMedianSortedArrays(int A[], int m, int B[], int n) {
-		int l = (m + n + 1) >> 1;
-		int r = (m + n + 2) >> 1;
-		return (getkth(A, m, B, n, l) + getkth(A, m, B, n, r)) / 2.0;
-	}
+ public:
+  double findMedianSortedArrays(const vector<int>& nums1, const vector<int>& nums2) {
+    const size_t all_size = nums1.size() + nums2.size();
+    vector<int> merged(all_size);
+    for (size_t i = 0, i1 = 0, i2 = 0; i < all_size; ++i) {
+      if (i1 < nums1.size()) {
+        if (i2 < nums2.size()) {
+          if (nums1[i1] < nums2[i2]) {
+            merged[i] = nums1[i1++];
+          } else {
+            merged[i] = nums2[i2++];
+          }
+        } else {
+          merged[i] = nums1[i1++];
+        }
+      } else {
+        merged[i] = nums2[i2++];
+      }
+    }
+    if (all_size % 2 == 1)
+      return double(merged[all_size / 2]);
+    else
+      return (merged[all_size / 2] + merged[all_size / 2 - 1]) / 2.0;
+  }
 };
 
-
-int main(void)
-{
-	Solution sln;
-
-	//auto rtn = sln.findMedianSortedArrays({ 1,3 }, { 2 });
-
-	return 0;
+int main(void) {
+  Solution sln;
+  int rtn = sln.findMedianSortedArrays({1, 3}, {2});
+  assert(rtn - 2.0 < 0.000001);
+  rtn = sln.findMedianSortedArrays({1, 2}, {3, 4});
+  assert(rtn - 2.5 < 0.000001);
+  return 0;
 }
