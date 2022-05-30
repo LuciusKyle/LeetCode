@@ -2,17 +2,18 @@
 #include <iostream>
 #include <vector>
 
+using std::cout;
 using std::vector;
 
 class Solution {
  public:
   vector<vector<int>> generateMatrix(const int n) {
     vector<vector<int>> rtn(n, vector<int>(n, 0));
-    int left = 0;
-    int right = n;
-    int up = 0;
-    int down = n;
-    int count = 0;
+    int left = 0,
+        right = n,
+        up = 0,
+        down = n,
+        count = 0;
     while (left < right) {
       for (int i = left; i < right; ++i) {
         rtn[up][i] = ++count;
@@ -36,28 +37,38 @@ class Solution {
   }
 };
 
+constexpr int kAnswerLength = 20;
+
 int main(void) {
   Solution sln;
-  auto rtn = sln.generateMatrix(4);
-  for (const auto &line : rtn) {
-    for (const auto ele : line) std::cout << ele << '\t';
-    std::cout << '\n';
-  }
-  std::cout << '\n';
+  cout << "const vector<vector<vector<int>>> kAllAnswers\n{\n";
+  for (int i = 0; i < kAnswerLength; ++i) {
+    auto rtn = sln.generateMatrix(i + 1);
+    cout << "{";
 
-  rtn = sln.generateMatrix(5);
-  for (const auto &line : rtn) {
-    for (const auto ele : line) std::cout << ele << '\t';
-    std::cout << '\n';
-  }
-  std::cout << '\n';
+    for (size_t row = 0; row < rtn.size(); ++row) {
+      cout << "{";
 
-  rtn = sln.generateMatrix(6);
-  for (const auto &line : rtn) {
-    for (const auto ele : line) std::cout << ele << '\t';
-    std::cout << '\n';
+      for (size_t column = 0; column < rtn[row].size(); ++column) {
+        cout << rtn[row][column];
+        if (column != rtn[row].size() - 1)
+          cout << ", ";
+      }
+
+      if (row == rtn.size() - 1)
+        cout << "}";
+      else
+        cout << "},\n";
+    }
+
+    if (i == kAnswerLength - 1)
+      cout << "}\n";
+    else
+      cout << "},\n\n";
   }
-  std::cout << '\n';
+  cout << "};";
+
+  cout << std::endl;
 
   return 0;
 }
