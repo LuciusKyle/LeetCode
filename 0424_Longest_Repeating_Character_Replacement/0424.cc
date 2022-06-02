@@ -12,24 +12,23 @@ using std::vector;
 class Solution {
  public:
   int characterReplacement(const string s, int k) {
-    int data[26][4] = {0};  // [][0]: left index, [][1]: right index, [][2]: current max, [][3]: current replacement.
-    for (int i = 0; i < s.size(); ++i) {
+    int data[26][3] = {0};  // [][0]: left index, [][1]: current max, [][2]: current replacement.
+    for (int i = 0; i < s.size(); ++i)
       for (int j = 0; j < 26; ++j) {
-        ++data[j][1];
-        if (s[i] - 'A' != j) ++data[j][3];
-        if (k < data[j][3]) {
+        if (s[i] - 'A' != j) ++data[j][2];
+        if (k < data[j][2]) {
           do {
             ++data[j][0];
-          } while (s[data[j][0] - 1] - 'A' == j && data[j][0] < data[j][1]);
-          --data[j][3];
+          } while (s[data[j][0] - 1] - 'A' == j && data[j][0] < i + 1);
+          --data[j][2];
         }
-        if (data[j][2] < data[j][1] - data[j][0]) data[j][2] = data[j][1] - data[j][0];
+        if (data[j][1] < i + 1 - data[j][0]) data[j][1] = i + 1 - data[j][0];
       }
-    }
+
     int max_length = -1;
-    for (int i = 0; i < 26; ++i) {
-      if (max_length < data[i][2]) max_length = data[i][2];
-    }
+    for (int i = 0; i < 26; ++i)
+      if (max_length < data[i][1]) max_length = data[i][1];
+
     return max_length;
   }
 };
