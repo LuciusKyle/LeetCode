@@ -4,6 +4,7 @@
 #include <array>
 #include <iostream>
 #include <string>
+#include <thread>
 #include <vector>
 
 using std::string;
@@ -13,8 +14,8 @@ class Solution {
  public:
   int characterReplacement(const string s, int k) {
     int data[26][3] = {0};  // [][0]: left index, [][1]: current max, [][2]: current replacement.
-    for (int i = 0; i < s.size(); ++i)
-      for (int j = 0; j < 26; ++j) {
+    for (int j = 0; j < 26; ++j)
+      for (int i = 0; i < s.size(); ++i) {
         if (s[i] - 'A' != j) ++data[j][2];
         if (k < data[j][2]) {
           do {
