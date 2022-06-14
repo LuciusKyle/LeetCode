@@ -1,31 +1,28 @@
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 using std::vector;
 
 class Solution {
  public:
   int minimumTotal(vector<vector<int>>& triangle) {
-    vector<vector<int>> rtn = triangle;
-    for(int i = static_cast<int>(triangle.size()) - 2; i >= 0; --i)
-      for(int ii = 0; ii <= i; ++ii){
-        rtn[i][ii] = triangle[i][ii] + std::min(rtn[i+1][ii], rtn[i+1][ii+1]);
-      }
-    return rtn[0][0];
+    for (int row = static_cast<int>(triangle.size()) - 2; row >= 0; --row)
+      for (int i = 0; i <= row; ++i)
+        triangle[row][i] = triangle[row][i] + std::min(triangle[row + 1][i], triangle[row + 1][i + 1]);
+
+    return triangle[0][0];
   }
 };
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char* argv[]) {
   Solution sln;
   vector<int> row{2};
   vector<vector<int>> test_sample;
   test_sample.push_back(vector<int>{2});
-  test_sample.push_back(vector<int>{3,4});
-  test_sample.push_back(vector<int>{5,6,7});
-  test_sample.push_back(vector<int>{4,1,8,3});
+  test_sample.push_back(vector<int>{3, 4});
+  test_sample.push_back(vector<int>{6, 5, 7});
+  test_sample.push_back(vector<int>{4, 1, 8, 3});
   int rtn = sln.minimumTotal(test_sample);
   return 0;
 }
-
