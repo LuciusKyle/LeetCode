@@ -1,41 +1,31 @@
 
-// C version instead of C++.
-#include <assert.h>
+#include <limits.h>
 #include <string.h>
 
-bool isPalindrome(int x) {
-  if (x < 0) return false;
-  char num_str[16] = {'\0'}; // store reversed number; x = 123, num_str is "321";
-  size_t i = 0;
-  do {
-    num_str[i] = static_cast<char>(x % 10);
-    x /= 10;
-    ++i;
-  } while (x != 0);
-  const size_t str_len = i;
-  for (i = 0; i < str_len / 2; ++i) {
-    if (num_str[i] != num_str[str_len - i - 1]) {
-      return false;
+#include <string>
+
+using std::string;
+
+constexpr int ma = INT_MAX;
+constexpr int mi = INT_MIN;
+constexpr long lma = LONG_MAX;
+
+class Solution {
+ public:
+  bool isPalindrome(const int x) {
+    long r_num = 0;
+    int temp_num = abs(x);
+    while (temp_num) {
+      r_num *= 10;
+      r_num += (temp_num % 10);
+      temp_num /= 10;
     }
+    return r_num == x;
   }
-  return true;
-}
+};
 
 int main(void) {
-  bool rtn = isPalindrome(123);
-  assert(!rtn);
-
-  rtn = isPalindrome(121);
-  assert(rtn);
-
-  rtn = isPalindrome(1221);
-  assert(rtn);
-
-  rtn = isPalindrome(0);
-  assert(rtn);
-
-  rtn = isPalindrome(-1);
-  assert(!rtn);
-
+  Solution sln;
+  sln.isPalindrome(-121);
   return 0;
 }
