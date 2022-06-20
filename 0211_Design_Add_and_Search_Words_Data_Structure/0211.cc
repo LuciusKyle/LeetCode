@@ -12,17 +12,22 @@ using std::endl;
 using std::string;
 using std::vector;
 
-constexpr size_t kSizeLimit = 16 * 1024 * 1024;
+constexpr size_t kFileSizeLimit = 16 * 1024 * 1024;
 
 class WordDictionary {
  public:
-  WordDictionary() : root_(25, std::make_shared<Node>()) {}
+  WordDictionary() {
+    for (int i = 0; i < 25; ++i) root_.push_back(new Node);
+  }
+  ~WordDictionary() {
+    for (auto ptr : root_) delete ptr;
+  }
 
   void addWord(const string word) {
-    std::shared_ptr<Node> temp_node_ptr = root_[word.size() - 1];
+    Node *temp_node_ptr = root_[word.size() - 1];
     for (const char ch : word) {
       if (temp_node_ptr->child_nodes[ch - 'a'] == nullptr)
-        temp_node_ptr->child_nodes[ch - 'a'] = std::make_shared<Node>();
+        temp_node_ptr->child_nodes[ch - 'a'] = new Node;
 
       temp_node_ptr = temp_node_ptr->child_nodes[ch - 'a'];
     }
@@ -35,16 +40,19 @@ class WordDictionary {
 
  private:
   struct Node;
-  bool search(const string &target, size_t start_index, std::shared_ptr<Node> temp_root_ptr) const;
+  bool search(const string &target, size_t start_index, const Node *temp_root_ptr) const;
   struct Node {
     Node() : end_of_word(false), child_nodes{nullptr} {};
+    ~Node() {
+      for (auto ptr : child_nodes) delete ptr; // delete nullptr is OK;
+    }
     bool end_of_word;
-    std::shared_ptr<Node> child_nodes[26];
+    Node *child_nodes[26];
   };
-  vector<std::shared_ptr<Node>> root_;
+  vector<Node *> root_;
 };
 
-bool WordDictionary::search(const string &target, size_t start_index, std::shared_ptr<Node> temp_root_ptr) const {
+bool WordDictionary::search(const string &target, size_t start_index, const Node *temp_root_ptr) const {
   for (size_t i = start_index; i < target.size(); ++i) {
     if (target[i] == '.') {
       bool one_possible_answer = false;
@@ -72,18 +80,20 @@ bool WordDictionary::search(const string &target, size_t start_index, std::share
  */
 
 int main(int argc, char *argv[]) {
+  char *abc = nullptr;
+  delete abc;
   auto start = std::chrono::high_resolution_clock::now();
   auto duration = start - start;
 
-  char *buf = new char[kSizeLimit];
+  char *buf = new char[kFileSizeLimit];
   FILE *fp = nullptr;
   const re2::RE2 line_break_regex = R"reg(([[:graph:]]+?)[[:space:]]([[:graph:]]+?)[[:space:]]+)reg";
   const re2::RE2 extract_element = R"reg(\"(.+?)\")reg";
   for (int i = 1; i < argc; ++i) {
     fp = fopen(argv[i], "rb");
     if (fp == nullptr) continue;
-    const size_t file_size = fread(buf, 1, kSizeLimit, fp);
-    if (kSizeLimit <= file_size) {
+    const size_t file_size = fread(buf, 1, kFileSizeLimit, fp);
+    if (kFileSizeLimit <= file_size) {
       fclose(fp);
       continue;
     }
