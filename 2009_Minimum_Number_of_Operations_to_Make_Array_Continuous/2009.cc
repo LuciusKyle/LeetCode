@@ -9,7 +9,7 @@
 using std::vector;
 
 // beats 60%.
-class Solution {
+class Solution_beats_60_per_cent {
  public:
   int minOperations(vector<int>& nums) {
     const int nums_size = nums.size();
@@ -24,6 +24,25 @@ class Solution {
     for (int i = 0, r_index = 0, left_dup_count = 0, right_dup_count = 0; i < nums_size; ++i) {
       while (r_index + 1 < nums_size && nums[r_index + 1] < nums[i] + nums_size) ++r_index;
       max_window = std::max(max_window, (r_index - i) - (dup_count[r_index] - dup_count[i]));
+    }
+    return nums_size - max_window - 1;
+  }
+};
+
+// beats 75%.
+class Solution {
+ public:
+  int minOperations(vector<int>& nums) {
+    const int nums_size = nums.size();
+    std::sort(nums.begin(), nums.end());
+    int max_window = 0;
+    for (int i = 0, r_index = 0, left_dup_count = 0, right_dup_count = 0; i < nums_size; ++i) {
+      if (0 < i && nums[i - 1] == nums[i]) ++left_dup_count;
+      while (r_index + 1 < nums_size && nums[r_index + 1] < nums[i] + nums_size) {
+        ++r_index;
+        if (nums[r_index] == nums[r_index - 1]) ++right_dup_count;
+      }
+      max_window = std::max(max_window, (r_index - i) - (right_dup_count - left_dup_count));
     }
     return nums_size - max_window - 1;
   }
