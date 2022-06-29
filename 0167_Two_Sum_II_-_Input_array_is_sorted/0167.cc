@@ -6,27 +6,16 @@ using std::vector;
 class Solution {
  public:
   vector<int> twoSum(const vector<int>& numbers, int target) {
-    size_t lower_index = 0;
-    size_t upper_index = numbers.size() - 1;
-    while (lower_index < upper_index) {
-      const int sum = numbers[lower_index] + numbers[upper_index];
-      if (sum < target) {
-        ++lower_index;
-        continue;
-      }
-      if (target < sum) {
-        --upper_index;
-        continue;
-      }
-      return {static_cast<int>(lower_index + 1), static_cast<int>(upper_index + 1)};
+    int l_index = 0, r_index = numbers.size() - 1;
+    while (l_index < r_index) {
+      const int temp_sum = numbers[l_index] + numbers[r_index];
+      if (temp_sum < target)
+        ++l_index;
+      else if (target < temp_sum)
+        --r_index;
+      else
+        return {l_index + 1, r_index + 1};
     }
-    return {static_cast<int>(lower_index + 1), static_cast<int>(upper_index + 1)};
+    return {};
   }
 };
-
-int main(void) {
-  Solution sln;
-  auto rtn = sln.twoSum({1, 2, 7, 11, 15}, 9);
-
-  return 0;
-}
