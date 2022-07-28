@@ -1,5 +1,6 @@
 
-#include <array>
+#include <memory.h>
+
 #include <string>
 
 using std::string;
@@ -8,16 +9,12 @@ class Solution {
  public:
   bool isAnagram(const string s, const string t) {
     if (s.size() != t.size()) return false;
-    std::array<size_t, 0x100> arr_of_s{0};
-    std::array<size_t, 0x100> arr_of_t{0};
-
-    for (size_t i = 0; i < s.size(); ++i) {
-      ++arr_of_s[s[i]];
-      ++arr_of_t[t[i]];
+    int dict_s[26] = {0}, dict_t[26] = {0};
+    for (int i = 0; i < s.size(); ++i) {
+      ++dict_s[s[i] - 'a'];
+      ++dict_t[t[i] - 'a'];
     }
-    for (size_t i = 0; i < 0x100; ++i)
-      if (arr_of_s[i] != arr_of_t[i]) return false;
-    return true;
+    return 0 == memcmp(dict_s, dict_t, 26 * sizeof(int));
   }
 };
 
