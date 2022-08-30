@@ -7,15 +7,11 @@ using std::vector;
 class Solution {
  public:
   void rotate(vector<vector<int>> &matrix) {
-    const size_t out_edge_length = matrix.size();
-    for (size_t j = 0; j < out_edge_length / 2; ++j) {
-      const size_t inner_edge_length = out_edge_length - 2 * j;
-      for (size_t i = 0; i < inner_edge_length - 1; ++i) {
-        sift_element(
-            matrix[j][i + j], matrix[i + j][inner_edge_length - 1 + j],
-            matrix[inner_edge_length - 1 + j][inner_edge_length - 1 - i + j],
-            matrix[inner_edge_length - 1 - i + j][j]);
-      }
+    const int out_edge_length = matrix.size();
+    for (int j = 0; j < out_edge_length / 2; ++j) {
+      const int inner_edge_length = out_edge_length - 2 * j;
+      for (int i = 0; i < inner_edge_length - 1; ++i)
+        sift_element(matrix[j][i + j], matrix[i + j][inner_edge_length - 1 + j], matrix[inner_edge_length - 1 + j][inner_edge_length - 1 - i + j], matrix[inner_edge_length - 1 - i + j][j]);
     }
   }
 
