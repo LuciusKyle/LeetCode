@@ -7,7 +7,7 @@ using std::vector;
 
 // LeetCode version. O(n) extra space and O(n) runtime.
 // there is a O(1) extra space and O(n) runtime solution.
-class Solution {
+class Solution0 {
  public:
   vector<int> findDisappearedNumbers(const vector<int>& nums) {
     vector<int> temp(nums.size());
@@ -16,6 +16,40 @@ class Solution {
     for (size_t i = 0; i < temp.size(); ++i)
       if (temp[i] == 0) rtn.push_back(i + 1);
     return rtn;
+  }
+};
+
+// O(1) extra space, beats 24%.
+class Solution2 {
+ public:
+  vector<int> findDisappearedNumbers(vector<int>& nums) {
+    for (int i = 0; i < nums.size(); ++i) {
+      int curr_num = nums[i], next_num = nums[i];
+      while (nums[curr_num - 1] != curr_num) {
+        next_num = nums[curr_num - 1];
+        nums[curr_num - 1] = curr_num;
+        curr_num = next_num;
+      }
+    }
+    vector<int> rtn;
+    for (int i = 0; i < nums.size(); ++i)
+      if (nums[i] != i + 1) rtn.push_back(i + 1);
+    return rtn;
+  }
+};
+
+// O(1) extra space, beats 23%. LOL.
+class Solution {
+ public:
+  vector<int> findDisappearedNumbers(vector<int>& nums) {
+    for (int i = 0; i < nums.size(); ++i) {
+      const int curr_index = (nums[i] < 0 ? -1 * nums[i] : nums[i]) - 1;
+      if (0 < nums[curr_index]) nums[curr_index] *= -1;
+    }
+    vector<int> result;
+    for (int i = 0; i < nums.size(); ++i)
+      if (0 < nums[i]) result.push_back(i + 1);
+    return result;
   }
 };
 
