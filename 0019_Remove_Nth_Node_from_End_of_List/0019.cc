@@ -1,55 +1,28 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-class Solution {
- public:
-  ListNode* removeNthFromEnd(ListNode* head, int n) {
-    int count = 0;
-    if (n == remove_Node(head, n, count))
-      return head->next;
-    else
-      return head;
-  }
 
- private:
-  int remove_Node(struct ListNode* cur, const int n_to_remove,
-                  int& count_from_end) {
-    if (cur->next != nullptr)
-      remove_Node(cur->next, n_to_remove, count_from_end);
 
-    ++count_from_end;
-    if (count_from_end == n_to_remove + 1) cur->next = cur->next->next;
-    return count_from_end;
-  }
+// Definition for singly-linked list.
+struct ListNode {
+  int val;
+  ListNode* next;
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////
-// my code only beat 28% of cpp submissions.
-// the following if 100% beats code from leetcode.
 class Solution {
  public:
   ListNode* removeNthFromEnd(ListNode* head, int n) {
-    ListNode* slow(head);
-    ListNode* fast(head);
-
-    while (n--) {
-      fast = fast->next;
+    ListNode my_head(0, head);
+    ListNode* head_ptr = &my_head;
+    ListNode* curr_ptr = &my_head;
+    for (int i = 0; i <= n; ++i) {
+      curr_ptr = curr_ptr->next;
     }
-
-    if (!fast) return head->next;
-
-    while (fast->next) {
-      slow = slow->next;
-      fast = fast->next;
+    while (curr_ptr != nullptr) {
+      head_ptr = head_ptr->next;
+      curr_ptr = curr_ptr->next;
     }
-
-    slow->next = slow->next->next;
-
-    return head;
+    head_ptr->next = head_ptr->next->next;
+    return my_head.next;
   }
 };
