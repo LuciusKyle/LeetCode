@@ -14,13 +14,6 @@ class Solution {
         all_a = false;
         break;
       }
-    if (!all_a) return palindrome;
-    for (int i = (length % 2 == 0 ? length / 2 : (length / 2 + 1)); i < length; ++i)
-      if (palindrome[i] != 'a') {
-        palindrome[i] = 'a';
-        all_a = false;
-        break;
-      }
     if (all_a) palindrome[length - 1] = 'b';
     return palindrome;
   }
