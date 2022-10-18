@@ -64,3 +64,27 @@ int main(void) {
   }
   return 0;
 }
+
+class Solution_not_so_efficient {
+ public:
+  string countAndSay(int n) {
+    if (n == 1) return "1";
+    string base = "1";
+    string generated_str;
+    for (int i = 1; i < n; ++i) {
+      int repeation = 1, pre_num = base[0] - '0';
+      for (int i = 1; i < base.size(); ++i)
+        if (pre_num == base[i] - '0')
+          ++repeation;
+        else {
+          generated_str.append(std::to_string(repeation) + std::to_string(pre_num));
+          pre_num = base[i] - '0';
+          repeation = 1;
+        }
+      generated_str.append(std::to_string(repeation) + std::to_string(pre_num));
+      base = generated_str;
+      generated_str.clear();
+    }
+    return base;
+  }
+};
