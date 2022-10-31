@@ -1,7 +1,11 @@
 
 #include <assert.h>
+
+#include <iostream>
 #include <string>
 
+using std::cout;
+using std::endl;
 using std::string;
 
 // s = "3[a]2[bc]", return "aaabcbc".
@@ -10,39 +14,66 @@ using std::string;
 class Solution {
  public:
   string decodeString(const string s) {
-    string rtn;
-    for(size_t i = 0; i < s.size(); ++i) {
-      if ('0' - 1 < s[i] && s[i] < '9' + 1) {
-        const size_t repeat_count = atoi(&(s[i]));
-        size_t temp_len = 0;
-        const string repeat_str = oneGroup(&(s[i]), temp_len);
-        for(size_t ii=0;ii<repeat_count;++ii)
-          rtn.append(repeat_str);
-        i += temp_len;
-      } else {
-        rtn.push_back(s[i]);
+    string content;
+    for (int i = 0; i < s.size(); ++i)
+      if ('0' <= s[i] && s[i] <= '9') {
+        int end = i;
+        do {
+          ++end;
+        } while (s[end] != '[');
+        int level = 0;
+        do {
+          if (s[end] == '[') ++level;
+          if (s[end] == ']') --level;
+          ++end;
+        } while (level != 0);
+        content.append(decodeRepeatingString({s.cbegin() + i, s.cbegin() + end}));
+        i = end - 1;
+      } else if (s[i] != ']') {
+        content.push_back(s[i]);
       }
-    }
-    return rtn;
+    return content;
   }
 
  private:
-  [[gnu::const]] string oneGroup(const char *str, size_t &str_len) {
-    size_t start_index = 0;
-    size_t end_index = 0;
-    while (str[end_index] != ']') {
-      if (str[end_index] == '[') start_index = end_index + 1;
-      ++end_index;
-    }
-    str_len = end_index;
-    return string(str + start_index, end_index - start_index);
+  string decodeRepeatingString(const string& s) {
+    const int repeation = atoi(s.c_str());
+    string content;
+    for (int i = 99 < repeation ? 4 : (9 < repeation ? 3 : 2); i < s.size(); ++i)
+      if ('0' <= s[i] && s[i] <= '9') {
+        int end = i;
+        do {
+          ++end;
+        } while (s[end] != '[');
+        int level = 0;
+        do {
+          if (s[end] == '[') ++level;
+          if (s[end] == ']') --level;
+          ++end;
+        } while (level != 0);
+        content.append(decodeRepeatingString({s.cbegin() + i, s.cbegin() + end}));
+        i = end - 1;
+      } else if (s[i] != ']') {
+        content.push_back(s[i]);
+      }
+    string result;
+    result.reserve(repeation * content.size());
+    for (int c = 0; c < repeation; ++c)
+      result.append(content);
+    return result;
   }
 };
 
-int main(void) {
+int main(int argc, char* argv[]) {
+  if (argc == 1) return 0;
   Solution sln;
+  cout << sln.decodeString(argv[1]) << endl;
+  return 0;
+
+  cout << atoi(argv[1]) << endl;
+  return 0;
   assert(sln.decodeString("3[a]2[bc]") == "aaabcbc");
   assert(sln.decodeString("2[abc]3[cd]ef") == "abcabccdcdcdef");
+  assert(sln.decodeString("3[z]2[2[y]pq4[2[jk]e1[f]]]ef") == "zzzyypqjkjkefjkjkefjkjkefjkjkefyypqjkjkefjkjkefjkjkefjkjkefef");
   // s = "3[a2[c]]", return "accaccacc".
-  return 0;
 }
