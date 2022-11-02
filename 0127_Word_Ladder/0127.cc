@@ -100,34 +100,51 @@ class Solution02 {
 // 1500 ms. WTF?
 class Solution {
  public:
-  int ladderLength(string beginWord, string endWord, const vector<string>& wordList) {
-    vector<bool> touched(wordList.size(), false);
-    vector<string> pre_vec({beginWord});
-    pre_vec.reserve(wordList.size());
-    vector<string> cur_vec;
-    cur_vec.reserve(wordList.size());
-    int rtn = 1;
-    while (!pre_vec.empty()) {
-      ++rtn;
-      for (const auto& word : pre_vec)
-        for (size_t i = 0; i < wordList.size(); ++i)
-          if (!touched[i]) {
-            int diff_count = 0;
-            for (int ii = 0; ii < word.size(); ++ii)
-              if (word[ii] != wordList[i][ii]) ++diff_count;
-            if (diff_count == 1) {
-              if (wordList[i] == endWord)
-                return rtn;
-              else {
-                cur_vec.push_back(wordList[i]);
-                touched[i] = true;
-              }
-            }
+  int ladderLength(const string beginWord, const string endWord, const vector<string>& wordList) {
+    vector<string> current_str_vec;
+    list<string> remain_words;
+    remain_words.push_back(string());
+    for (const string& word : wordList)
+      switch (wordDiff(beginWord, word)) {
+        case 0:
+          break;
+        case 1:
+          current_str_vec.push_back(word);
+          if (word == endWord) return 2;
+          break;
+        default:
+          remain_words.push_back(word);
+          break;
+      }
+
+    int level = 1;
+    vector<string> next_level;
+    while (!current_str_vec.empty()) {
+      ++level;
+      for (const string& gene : current_str_vec) {
+        auto iter = remain_words.begin();
+        ++iter;
+        for (; iter != remain_words.end(); ++iter)
+          if (1 == wordDiff(gene, *iter)) {
+            if (*iter == endWord) return level + 1;
+            next_level.push_back(*iter);
+            iter = remain_words.erase(iter);
+            --iter;
           }
-      cur_vec.swap(pre_vec);
-      cur_vec.clear();
+      }
+      current_str_vec = next_level;
+      next_level.clear();
     }
     return 0;
+  }
+
+ private:
+  int wordDiff(const string& str1, const string& str2) {
+    int diff = 0;
+    for (int i = 0; i < str1.size(); ++i) {
+      if (str1[i] != str2[i]) ++diff;
+    }
+    return diff;
   }
 };
 
