@@ -15,13 +15,13 @@ class MedianFinder {
   void addNum(int num) {
     if (smaller_nums_.empty() || num < *smaller_nums_.crbegin()) {
       smaller_nums_.insert(num);
-      if (greater_nums_.size() < smaller_nums_.size() && (1 < smaller_nums_.size() - greater_nums_.size())) {
+      if (1 < smaller_nums_.size() - greater_nums_.size()) {
         greater_nums_.insert(*smaller_nums_.crbegin());
         smaller_nums_.erase(--smaller_nums_.end());
       }
     } else {
       greater_nums_.insert(num);
-      if (smaller_nums_.size() < greater_nums_.size() && (1 < greater_nums_.size() - smaller_nums_.size())) {
+      if (1 < greater_nums_.size() - smaller_nums_.size()) {
         smaller_nums_.insert(*greater_nums_.cbegin());
         greater_nums_.erase(greater_nums_.begin());
       }
@@ -30,8 +30,6 @@ class MedianFinder {
 
   double findMedian() {
     // if (greater_nums_.empty() && smaller_nums_.empty()) abort(); // LeetCode don't test this.
-    if (greater_nums_.empty()) return double(*smaller_nums_.cbegin());
-    if (smaller_nums_.empty()) return double(*greater_nums_.cbegin());
     if (smaller_nums_.size() == greater_nums_.size())
       return (double(*greater_nums_.cbegin()) + *smaller_nums_.crbegin()) / 2;
     else
