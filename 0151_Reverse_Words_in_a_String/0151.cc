@@ -7,10 +7,9 @@ using std::string;
 
 class Solution {
  public:
-  void reverseWords(string &s) {
+  string reverseWords(string s) {
     string buf;
     stack<string> stk;
-    buf.reserve(s.size());
     for (const char ch : s)
       if (ch == ' ') {
         if (!buf.empty()) stk.push(buf);
@@ -23,7 +22,8 @@ class Solution {
       s.append(stk.top() + " ");
       stk.pop();
     }
-    s.erase(s.cend() - 1);
+    s.pop_back();
+    return s;
   }
 };
 
