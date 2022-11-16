@@ -1,34 +1,47 @@
+/**
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is higher than the picked number
+ *			      1 if num is lower than the picked number
+ *               otherwise return 0
+ * int guess(int num);
+ */
 
-#include <assert.h>
-
-// Forward declaration of guess API.
-// @param num, your guess
-// @return -1 if my number is lower, 1 if my number is higher, otherwise return
-// 0
 int guess(int num);
 
-// assume the answer is 17.
-int guess(int num) { return num == 17 ? 0 : (num < 17 ? -1 : 1); }
+constexpr int kPickedNumber = 6;
+int guess(int num) {
+  if (num < kPickedNumber)
+    return 1;
+  else if (kPickedNumber < num)
+    return -1;
+  else
+    return 0;
+}
 
 class Solution {
  public:
   int guessNumber(int n) {
-    int lower_bound = 0;
-    while (1 < n - lower_bound) {
-      const int mid = (static_cast<long long>(lower_bound) + n) / 2;
-      const int result = guess(mid);
-      if (result == 0) return mid;
-      if (result == -1)
-        lower_bound = mid;
+    int left_boundary = 1, right_boundary = n, result = guess(left_boundary + (right_boundary - left_boundary) / 2);
+    n = left_boundary + (right_boundary - left_boundary) / 2;
+    while (result && right_boundary - left_boundary != 1) {
+      n = left_boundary + (right_boundary - left_boundary) / 2;
+      if (result < 0)
+        right_boundary = n;
       else
-        n = mid;
+        left_boundary = n;
+      result = guess(left_boundary + (right_boundary - left_boundary) / 2);
     }
-    return guess(lower_bound) == 0 ? lower_bound : n;
+    n = left_boundary + (right_boundary - left_boundary) / 2;
+    if (right_boundary - left_boundary == 1)
+      return guess(left_boundary) == 0 ? left_boundary : right_boundary;
+    else
+      return n;
   }
 };
 
 int main(void) {
   Solution sln;
-  for (int i = 17; i < 171717; ++i) assert(17 == sln.guessNumber(i));
+  int ret = sln.guessNumber(10);
   return 0;
 }
