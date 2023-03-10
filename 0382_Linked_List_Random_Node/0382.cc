@@ -1,40 +1,34 @@
 
+#include <time.h>
+
+#include <random>
+#include <vector>
+
+using std::vector;
 
 // Definition for singly-linked list.
 struct ListNode {
   int val;
-  ListNode* next;
+  ListNode *next;
+  ListNode() : val(0), next(nullptr) {}
   ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
-
-
-#include <vector>
-#include <random>
-
-using std::vector;
 
 class Solution {
  public:
-  /** @param head The linked list's head.
-      Note that the head is guaranteed to be not null, so it contains at least
-     one node. */
-  Solution(ListNode* head) {
-    while (head != nullptr) {
-      number_cache_.push_back(head->val);
+  Solution(ListNode *head) {
+    do {
+      vals_.push_back(head->val);
       head = head->next;
-    }
-    dist.param(decltype(dist)::param_type{0, number_cache_.size() - 1});
+    } while (head != nullptr);
+    srand(time(nullptr));
   }
 
-  /** Returns a random node's value. */
-  int getRandom() {
-    return number_cache_[dist(rd)];
-  }
+  int getRandom() { return vals_[rand() % vals_.size()]; }
 
  private:
-  vector<int>number_cache_;
-  std::uniform_int_distribution<size_t> dist;
-  std::random_device rd;
+  vector<int> vals_;
 };
 
 /**
@@ -42,5 +36,3 @@ class Solution {
  * Solution* obj = new Solution(head);
  * int param_1 = obj->getRandom();
  */
-
-int main(void) { return 0; }
