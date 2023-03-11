@@ -1,6 +1,10 @@
 
 #include <limits.h>
 
+#include <vector>
+
+using std::vector;
+
 // Definition for singly-linked list.
 struct ListNode {
   int val;
@@ -24,32 +28,31 @@ class Solution {
  public:
   TreeNode *sortedListToBST(ListNode *head) {
     if (head == nullptr) return nullptr;
-    return sortedListToBST(head, nullptr);
+    vector<int> vals;
+    while (head != nullptr) {
+      vals.push_back(head->val);
+      head = head->next;
+    }
+    vals.push_back(INT_MAX);
+    return sortedListToBST(vals.data(), vals.data() + vals.size() - 1);
   }
 
  private:
-  TreeNode *sortedListToBST(ListNode *head, ListNode *tail) {
-    ListNode auxiliary_node(INT_MIN, head);
-    ListNode *faster_node = &auxiliary_node, *slower_node = &auxiliary_node, *pre_node = &auxiliary_node;
-    while (faster_node != tail) {
-      pre_node = slower_node;
-      slower_node = slower_node->next;
-      faster_node = faster_node->next;
-      if (faster_node != tail) faster_node = faster_node->next;
-    }
-    TreeNode *tree_node = new TreeNode(slower_node->val);
-    if (slower_node != head) {
-      if (head->next == slower_node)
-        tree_node->left = new TreeNode(head->val);
-      else
-        tree_node->left = sortedListToBST(head, slower_node);
-    }
-    if (slower_node->next != tail)
-      tree_node->right = sortedListToBST(slower_node->next, tail);
-
-    return tree_node;
+  TreeNode *sortedListToBST(int *start, int *end) {
+    if (start == end) return nullptr;
+    if (end - start == 1) return new TreeNode(*start);
+    const int mid_index = (end - start) / 2;
+    return new TreeNode(start[mid_index], sortedListToBST(start, start + mid_index), sortedListToBST(start + mid_index + 1, end));
   }
 };
+
+void freeTree(TreeNode *node) {
+  if (node != nullptr) {
+    freeTree(node->left);
+    freeTree(node->right);
+    delete node;
+  }
+}
 
 int main(void) {
   ListNode Five(5);
@@ -58,6 +61,6 @@ int main(void) {
   ListNode Two(2, &Three);
   ListNode One(1, &Two);
   Solution sln;
-  sln.sortedListToBST(&One);
+  freeTree(sln.sortedListToBST(&One));
   return 0;
 }
