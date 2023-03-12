@@ -1,44 +1,51 @@
 
-#include <limits.h>
-#include <list>
 #include <vector>
 
-using std::list;
 using std::vector;
 
+// Definition for singly-linked list.
 struct ListNode {
   int val;
   ListNode* next;
-  ListNode(int x) : val(x), next(NULL) {}
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
-// very bad runtime. 3% beat of cpp submissions.
 class Solution {
  public:
   ListNode* mergeKLists(vector<ListNode*>& lists) {
-    ListNode* head = new ListNode(0);
-    ListNode* working_ptr = head;
-    while (!all_nullptr(lists)) {
-      int min_index = -1;
-      int min_val = INT_MAX;
-      for (int i = 0; i < lists.size(); ++i)
-        if (lists[i] != nullptr)
-          if (lists[i]->val < min_val) {
-            min_val = lists[i]->val;
-            min_index = i;
-          }
-      working_ptr->next = lists[min_index];
-      working_ptr = working_ptr->next;
-      lists[min_index] = lists[min_index]->next;
-    }
-    working_ptr = head->next;
-    delete head;
-    return working_ptr;
+    if (lists.empty()) return nullptr;
+    vector<ListNode*> temp_ptrs;
+    temp_ptrs.reserve(lists.size() / 2 + 1);
+    do {
+      temp_ptrs.clear();
+      if (0 != lists.size() % 2)
+        temp_ptrs.push_back(lists.back());
+      for (int i = 1; i < lists.size(); i += 2)
+        temp_ptrs.push_back(merge2Lists(lists[i - 1], lists[i]));
+      lists = temp_ptrs;
+    } while (temp_ptrs.size() != 1);
+    return temp_ptrs.front();
   }
+
  private:
-  bool all_nullptr(const vector<ListNode*>& lists) const {
-    for (const auto ptr : lists)
-      if (ptr != nullptr) return false;
-    return true;
+  ListNode* merge2Lists(ListNode* _x, ListNode* _y) {
+    ListNode dummy_head, *ptr = &dummy_head;
+    while (_x != nullptr && _y != nullptr) {
+      if (_x->val < _y->val) {
+        ptr->next = _x;
+        _x = _x->next;
+      } else {
+        ptr->next = _y;
+        _y = _y->next;
+      }
+      ptr = ptr->next;
+    }
+    if (_x == nullptr)
+      ptr->next = _y;
+    else
+      ptr->next = _x;
+    return dummy_head.next;
   }
 };
