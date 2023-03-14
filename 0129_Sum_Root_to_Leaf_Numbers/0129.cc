@@ -10,8 +10,8 @@ struct TreeNode {
 
 class Solution {
  public:
+  Solution() : rtn(0) {}
   int sumNumbers(const TreeNode *root) {
-    rtn = 0;
     TreeTraversal(root, 0);
     return rtn;
   }
@@ -19,13 +19,9 @@ class Solution {
  private:
   int rtn;
   void TreeTraversal(const TreeNode *node, const int val) {
-    if (node == nullptr) return;
-    if (node->left == node->right) {
-      rtn += val * 10 + node->val;
-      return;
-    }
-    TreeTraversal(node->left, val * 10 + node->val);
-    TreeTraversal(node->right, val * 10 + node->val);
+    if (node->left == node->right) rtn += val * 10 + node->val;
+    if (node->left != nullptr) TreeTraversal(node->left, val * 10 + node->val);
+    if (node->right != nullptr) TreeTraversal(node->right, val * 10 + node->val);
   }
 };
 
