@@ -15,72 +15,27 @@ struct TreeNode {
   TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-class Solution_0105 {
- public:
-  TreeNode *buildTree(const vector<int> &preorder, const vector<int> &inorder) {
-    preorder_ptr_ = &preorder;
-    inorder_ptr_ = &inorder;
-    int max_val = INT_MIN;
-    for (const int val : inorder) {  // this for loop is time consuming.
-      if (val < min_val_) min_val_ = val;
-      if (max_val < val) max_val = val;
-    }
-    inorder_index_vec_.resize(max_val - min_val_ + 1);
-    for (int i = 0; i < inorder.size(); ++i)
-      inorder_index_vec_[inorder[i] - min_val_] = i;
-
-    return buildTree(0, 0, inorder.size() - 1);
-  }
-
- private:
-  int min_val_ = INT_MAX;
-  const vector<int> *preorder_ptr_ = nullptr;
-  const vector<int> *inorder_ptr_ = nullptr;
-  vector<int> inorder_index_vec_;
-
-  TreeNode *buildTree(const int preorder_index, const int start_idx, const int end_idx) {
-    TreeNode *node = new TreeNode((*preorder_ptr_)[preorder_index]);
-    const int inorder_index = inorder_index_vec_[(*preorder_ptr_)[preorder_index] - min_val_];
-    if (inorder_index != start_idx)
-      node->left = buildTree(preorder_index + 1, start_idx, inorder_index - 1);
-    if (inorder_index != end_idx)
-      node->right = buildTree(preorder_index + 1 + inorder_index - start_idx, inorder_index + 1, end_idx);
-
-    return node;
-  }
-};
-
 class Solution {
  public:
-  TreeNode *buildTree(const vector<int> &inorder, const vector<int> &postorder) {
-    postorder_ptr_ = &postorder;
-    inorder_ptr_ = &inorder;
-    int max_val = INT_MIN;
-    for (const int val : inorder) {  // this for loop is time consuming.
-      if (val < min_val_) min_val_ = val;
-      if (max_val < val) max_val = val;
+  Solution() : val_shift_(0) {}
+  TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
+    int min_val = INT_MAX, max_val = INT_MIN;
+    for (const int val : inorder) {
+      min_val = std::min(val, min_val);
+      max_val = std::max(val, max_val);
     }
-    inorder_index_vec_.resize(max_val - min_val_ + 1);
-    for (int i = 0; i < inorder.size(); ++i)
-      inorder_index_vec_[inorder[i] - min_val_] = i;
-    return buildTree(postorder.size() - 1, 0, inorder.size() - 1);
+    inorder_dict_.resize(max_val - min_val + 1, -1);
+    for (int i = 0; i < inorder.size(); ++i) inorder_dict_[inorder[i] - min_val] = i;
+    val_shift_ = min_val;
+    return buildTree(0, inorder.size(), postorder.data());
   }
 
  private:
-  int min_val_ = INT_MAX;
-  const vector<int> *postorder_ptr_ = nullptr;
-  const vector<int> *inorder_ptr_ = nullptr;
-  vector<int> inorder_index_vec_;
-
-  TreeNode *buildTree(const int postorder_idx, const int inorder_start_idx, const int inorder_end_idx) {
-    TreeNode *node = new TreeNode((*postorder_ptr_)[postorder_idx]);
-    const int inorder_index = inorder_index_vec_[(*postorder_ptr_)[postorder_idx] - min_val_];
-    if (inorder_index != inorder_end_idx)
-      node->right = buildTree(postorder_idx - 1, inorder_index + 1, inorder_end_idx);
-    if (inorder_index != inorder_start_idx)
-      node->left = buildTree(postorder_idx - 1 - (inorder_end_idx - inorder_index), inorder_start_idx, inorder_index - 1);
-
-    return node;
+  int val_shift_ /*, *inorder_vec_, *postorder_vec_*/;
+  vector<int> inorder_dict_;
+  TreeNode *buildTree(const int in_start, const int length, const int *postorder) const {
+    if (length == 0) return nullptr;
+    return new TreeNode(postorder[length - 1], buildTree(in_start, inorder_dict_[postorder[length - 1] - val_shift_] - in_start, postorder), buildTree(inorder_dict_[postorder[length - 1] - val_shift_] + 1, length - (inorder_dict_[postorder[length - 1] - val_shift_] - in_start) - 1, postorder + inorder_dict_[postorder[length - 1] - val_shift_] - in_start));
   }
 };
 
@@ -93,9 +48,9 @@ void freeTree(TreeNode *node) {
 
 int main(void) {
   Solution sln;
-  TreeNode *temp_root = sln.buildTree({15, 20, 7}, {15, 7, 20});
-  TreeNode *root = sln.buildTree({9, 3, 15, 20, 7}, {9, 15, 7, 20, 3});
-  freeTree(root);
-  freeTree(temp_root);
+  // TreeNode *temp_root = sln.buildTree({15, 20, 7}, {15, 7, 20});
+  // TreeNode *root = sln.buildTree({9, 3, 15, 20, 7}, {9, 15, 7, 20, 3});
+  // freeTree(root);
+  // freeTree(temp_root);
   return 0;
 }
