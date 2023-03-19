@@ -8,10 +8,7 @@ using std::vector;
 class Trie {
  public:
   Trie() : root_(new Node) {}
-  ~Trie() {
-    freeNodes(root_);
-    delete root_;
-  }
+  ~Trie() { delete root_; }
 
   void insert(const string word) {
     Node* temp_ptr = root_;
@@ -43,18 +40,12 @@ class Trie {
  private:
   struct Node {
     Node() : end_of_word(false), nodes{nullptr} {};
+    ~Node() {
+      for (Node* node : nodes) delete node;
+    }
     bool end_of_word;
     Node* nodes[26];
   };
-
-  void freeNodes(Node* node) {
-    for (Node* child_node : node->nodes) {
-      if (child_node != nullptr) {
-        freeNodes(child_node);
-        delete child_node;
-      }
-    }
-  }
   Node* root_;
 };
 

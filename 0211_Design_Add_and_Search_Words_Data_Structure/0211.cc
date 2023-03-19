@@ -16,61 +16,49 @@ constexpr size_t kFileSizeLimit = 16 * 1024 * 1024;
 
 class WordDictionary {
  public:
-  WordDictionary() {
-    for (int i = 0; i < 25; ++i) root_.push_back(new Node);
-  }
-  ~WordDictionary() {
-    for (auto ptr : root_) delete ptr;
-  }
+  WordDictionary() : root_(new Node()) {}
+  ~WordDictionary() { delete root_; }
 
-  void addWord(const string word) {
-    Node *temp_node_ptr = root_[word.size() - 1];
+  void addWord(string word) {
+    Node *temp_ptr = root_;
     for (const char ch : word) {
-      if (temp_node_ptr->child_nodes[ch - 'a'] == nullptr)
-        temp_node_ptr->child_nodes[ch - 'a'] = new Node;
-
-      temp_node_ptr = temp_node_ptr->child_nodes[ch - 'a'];
+      if (temp_ptr->nodes[ch - 'a'] == nullptr) temp_ptr->nodes[ch - 'a'] = new Node();
+      temp_ptr = temp_ptr->nodes[ch - 'a'];
     }
-    temp_node_ptr->end_of_word = true;
+    temp_ptr->end_of_word = true;
   }
 
-  bool search(const string target) {
-    return search(target, 0, root_[target.size() - 1]);
-  }
+  bool search(string word) const { return search(word.data(), root_); }
 
  private:
-  struct Node;
-  bool search(const string &target, size_t start_index, const Node *temp_root_ptr) const;
   struct Node {
-    Node() : end_of_word(false), child_nodes{nullptr} {};
+    Node() : end_of_word(false), nodes{nullptr} {};
     ~Node() {
-      for (auto ptr : child_nodes) delete ptr; // delete nullptr is OK;
+      for (Node *node : nodes) delete node;
     }
     bool end_of_word;
-    Node *child_nodes[26];
+    Node *nodes[26];
   };
-  vector<Node *> root_;
-};
-
-bool WordDictionary::search(const string &target, size_t start_index, const Node *temp_root_ptr) const {
-  for (size_t i = start_index; i < target.size(); ++i) {
-    if (target[i] == '.') {
-      bool one_possible_answer = false;
-      for (size_t j = 0; j < 26; ++j)
-        if (temp_root_ptr->child_nodes[j] != nullptr && search(target, i + 1, temp_root_ptr->child_nodes[j])) {
-          one_possible_answer = true;
-          break;
-        }
-
-      return one_possible_answer;
+  Node *root_;
+  bool search(const char *target, const Node *temp_node) const {
+    int i = 0;
+    while (target[i] != '\0') {
+      if (target[i] == '\n') return temp_node->end_of_word;
+      if (target[i] == '.') {
+        bool one_possible_answer = false;
+        for (int j = 0; j < 26; ++j)
+          if (temp_node->nodes[j] != nullptr && search(target + i + 1, temp_node->nodes[j])) {
+            one_possible_answer = true;
+            break;
+          }
+        return one_possible_answer;
+      }
+      if (temp_node->nodes[target[i] - 'a'] == nullptr) return false;
+      temp_node = temp_node->nodes[target[i++] - 'a'];
     }
-    if (temp_root_ptr->child_nodes[target[i] - 'a'] == nullptr)
-      return false;
-
-    temp_root_ptr = temp_root_ptr->child_nodes[target[i] - 'a'];
+    return temp_node->end_of_word;
   }
-  return temp_root_ptr->end_of_word;
-}
+};
 
 /**
  * Your WordDictionary object will be instantiated and called as such:
