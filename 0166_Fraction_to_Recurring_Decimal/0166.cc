@@ -12,38 +12,39 @@ using std::vector;
 // wrong when numerator = 1 and denominator = 90;
 class Solution {
  public:
-  string fractionToDecimal(int numerator, const int denominator) {
-    const int integer_part = numerator / denominator;
-    if (integer_part * denominator == numerator) return std::to_string(integer_part);
-    numerator -= integer_part * denominator;
-    map<int, int> numerator_map;
+  string fractionToDecimal(int numerator, int denominator) {
+    if (numerator == 0) return "0";
+    bool minus = false;
+    if ((numerator < 0 && 0 < denominator) || (0 < numerator && denominator < 0))
+      minus = true;
+    long long abs_numerator = std::abs((long long)numerator);
+    long long abs_denominator = std::abs((long long)denominator);
+    const int integer_part = abs_numerator / abs_denominator;
+    if (integer_part * abs_denominator == abs_numerator) return std::to_string(minus ? -1 * integer_part : integer_part);
+    abs_numerator -= integer_part * abs_denominator;
+    map<long long, int> abs_numerator_map;
     vector<int> decimal_part;
     int decimal_count = 0;
     int cycle = -1;
-    while (true) {
-      numerator *= 10;
-      if (0 < numerator_map.count(numerator)) {
-        cycle = numerator_map.at(numerator);
+    do {
+      abs_numerator *= 10;
+      if (0 < abs_numerator_map.count(abs_numerator)) {
+        cycle = abs_numerator_map.at(abs_numerator);
         break;
       }
-      numerator_map.insert({numerator, decimal_count});  // or possible {numerator,decimal_part.size()};
-      if (numerator < denominator) {
-        decimal_part.push_back(0);
-        continue;
-      }
-      decimal_part.push_back(numerator / denominator);
-      if (numerator % denominator == 0) break;
-      numerator %= denominator;
-      ++decimal_count;
-    }
-    string result = std::to_string(integer_part);
+      decimal_part.push_back(abs_numerator / abs_denominator);
+      abs_numerator_map[abs_numerator] = decimal_part.size();
+      abs_numerator -= (decimal_part.back() * (long long)abs_denominator);
+    } while (abs_numerator != 0);
+    string result = minus ? "-" : "";
+    result.append(std::to_string(integer_part));
     result.push_back('.');
-    if (cycle == -1) {
+    if (cycle == -1)
       for (const int digit : decimal_part)
         result.push_back(char(digit + '0'));
-    } else {
+    else {
       for (int i = 0; i < decimal_part.size(); ++i) {
-        if (i == cycle) result.push_back('(');
+        if (i + 1 == cycle) result.push_back('(');
         result.push_back(char(decimal_part[i] + '0'));
       }
       result.push_back(')');
@@ -54,6 +55,8 @@ class Solution {
 
 int main(int argc, char *argv[]) {
   Solution sln;
+  sln.fractionToDecimal(-2147483648, 1);
+  sln.fractionToDecimal(1, 90);
   sln.fractionToDecimal(4, 333);
   return 0;
 }
