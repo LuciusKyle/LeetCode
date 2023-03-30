@@ -3,23 +3,24 @@
 #include <string.h>
 
 #include <iostream>
-#include <map>
 #include <string>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 class Solution {
  public:
   bool isScramble(const string s1, const string s2) {
+    result_cache_.assign(s1.size(), vector<vector<int>>(s1.size(), vector<int>(s1.size(), 0)));
     return isScramble(s1.c_str(), s2.c_str(), 0, 0, s1.size());
   }
 
  private:
-   bool isScramble(const char* s1, const char* s2, const int start1, const int start2, const int len) {
+  bool isScramble(const char* s1, const char* s2, const int start1, const int start2, const int len) {
     if (len == 1)
       return s1[start1] == s2[start2];
-    if (result_cache_.count(start1) != 0 && result_cache_.at(start1).count(start2) != 0 && result_cache_.at(start1).at(start2).count(len) != 0)
-      return result_cache_.at(start1).at(start2).at(len);
+    if (result_cache_[start1][start2][len] != 0) return result_cache_[start1][start2][len] > 0;
     char dict_s1_from_left[26] = {0}, dict_s2_from_left[26] = {0}, dict_s2_from_right[26] = {0};
     for (int i = 0; i < len - 1; ++i) {
       ++dict_s1_from_left[s1[i + start1] - 'a'];
@@ -34,11 +35,11 @@ class Solution {
         return true;
       }
     }
-    result_cache_[start1][start2][len] = 0;
+    result_cache_[start1][start2][len] = -1;
     return false;
   }
 
-  std::map<int, std::map<int, std::map<int, int>>> result_cache_;
+  vector<vector<vector<int>>> result_cache_;
 };
 
 int main(int argc, char* argv[]) {
