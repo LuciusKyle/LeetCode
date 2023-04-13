@@ -16,7 +16,7 @@ class Solution {
 
  private:
   int all_sum_;
-  vector<int> all_used_sticks_;
+  vector<char> all_used_sticks_;
   bool makeSquare(const vector<int>& matchsticks, const int curr_edge, const int start_index, const int used_sticks, const int target) {
     if (all_used_sticks_[used_sticks] != 0) return all_used_sticks_[used_sticks] == 1;
     if (curr_edge == 3) {
