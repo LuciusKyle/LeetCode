@@ -5,6 +5,7 @@
 using std::string;
 using std::vector;
 
+// beats 73%, space complexity is O(n^2), could be O(n).
 class Solution {
  public:
   int longestPalindromeSubseq(const string s) {
@@ -17,20 +18,13 @@ class Solution {
       if (i != n - 1)
         dp[i][i + 1] = s[i] == s[i + 1] ? 2 : 1;
     }
-    // return longestPalindromeSubseq(s, 0, n - 1, dp); // faster, but still beats 5%.
-    for (int len = 2; len < n; ++len) {
-      for (int start = 0; start + len < n; ++start) {
-        dp[start][start + len] = std::max(dp[start + 1][start + len - 1] + (s[start] == s[start + len] ? 2 : 0), std::max(dp[start][start + len - 1], dp[start + 1][start + len]));
-      }
-    }
+    for (int len = 2; len < n; ++len)
+      for (int start = 0; start + len < n; ++start)
+        if (s[start] == s[start + len])
+          dp[start][start + len] = 2 + dp[start + 1][start + len - 1];
+        else
+          dp[start][start + len] = std::max(dp[start][start + len - 1], dp[start + 1][start + len]);
     return dp[0][n - 1];
-  }
-
- private:
-  int longestPalindromeSubseq(const string &s, int start, int end, vector<vector<int>> &dp) {
-    if (dp[start][end] != -1) return dp[start][end];
-    dp[start][end] = std::max(longestPalindromeSubseq(s, start + 1, end - 1, dp) + (s[start] == s[end] ? 2 : 0), std::max(longestPalindromeSubseq(s, start + 1, end, dp), longestPalindromeSubseq(s, start, end - 1, dp)));
-    return dp[start][end];
   }
 };
 
