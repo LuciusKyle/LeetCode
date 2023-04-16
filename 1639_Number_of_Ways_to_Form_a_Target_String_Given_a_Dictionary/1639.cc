@@ -7,7 +7,7 @@ using std::vector;
 
 class Solution {
  public:
-  int numWays(vector<string>& words, string target) {
+  int numWays(const vector<string>& words, const string target) {
     const int candidate_length = words[0].size();
     vector<vector<int>> ch_count(candidate_length, vector<int>(26));
     for (int i = 0; i < words.size(); ++i) {
@@ -24,10 +24,13 @@ class Solution {
         answer[j][i] = ch_count[j][target[i] - 'a'] * answer[j - 1][i - 1] + answer[j - 1][i];
       }
     }
-    int result = 0;
-    for (int i = target.size() - 1; i < candidate_length; ++i) {
-      result += answer[i].back();
-    }
-    return result;
+    return answer.back().back();
   }
 };
+
+int main(int argc, char* argv[]) {
+  Solution sln;
+  sln.numWays({"abba", "baab"}, "bab");
+  sln.numWays({"acca", "bbbb", "caca"}, "aba");
+  return 0;
+}
