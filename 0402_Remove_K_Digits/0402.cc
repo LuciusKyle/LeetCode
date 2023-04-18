@@ -1,35 +1,30 @@
 
 #include <assert.h>
-#include <array>
+
 #include <string>
 
-using std::array;
 using std::string;
-
-std::array<char, 8> verify_same_digit{0};
 
 class Solution {
  public:
   string removeKdigits(const string num, int k) {
     string rtn;
     rtn.reserve(num.size() - k + 1);
-    for (const char ch : num) {
-      while (k != 0 && !rtn.empty() && ch < rtn.back()) {
+    int i = 0, pop_count = 0;
+    for (; i < num.size(); ++i) {
+      while (pop_count < k && !rtn.empty() && num[i] < rtn.back()) {
         rtn.pop_back();
-        --k;
+        ++pop_count;
       }
-      rtn.push_back(ch);
+      rtn.push_back(num[i]);
     }
-    while (k != 0) {
+    for (int i = pop_count; i < k; ++i)
       rtn.pop_back();
-      --k;
-    }
-    auto begin_iter = rtn.cbegin();
-    while (*begin_iter == '0') ++begin_iter;
-    if (begin_iter == rtn.cend())
-      return "0";
-    else
-      return {begin_iter, rtn.cend()};
+    int leading_zeroes = 0;
+    while (leading_zeroes < rtn.size() && rtn[leading_zeroes] == '0')
+      ++leading_zeroes;
+    if (leading_zeroes == rtn.size()) return "0";
+    return {rtn.begin() + leading_zeroes, rtn.end()};
   }
 };
 
