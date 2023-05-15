@@ -24,11 +24,16 @@ class Solution {
     int bitmap = (1 << nums.size()) - 1;
     answer_cache_.assign(bitmap + 1, -1);
     answer_cache_[0] = 0;
+    gcd_cache_.assign(bitmap + 1, -1);
+    for (int i = 0; i + 1 < nums.size(); ++i)
+      for (int j = i + 1; j < nums.size(); ++j)
+        gcd_cache_[(1 << i) | (1 << j)] = greatestCommonDivisor(nums[i], nums[j]);
     return maxScore(nums, bitmap, 1);
   }
 
  private:
   vector<int> answer_cache_;
+  vector<int> gcd_cache_;
 
   int greatestCommonDivisor(int a, int b) const {
     // return __gcd(a, b);
@@ -48,7 +53,7 @@ class Solution {
       if (bitmap & (1 << i))
         for (int j = i + 1; j < nums.size(); ++j)
           if (bitmap & (1 << j))
-            max_score = std::max(max_score, depth * greatestCommonDivisor(nums[i], nums[j]) + maxScore(nums, ~(1 << i) & ~(1 << j) & bitmap, depth + 1));
+            max_score = std::max(max_score, depth * gcd_cache_[(1 << i) | (1 << j)] + maxScore(nums, ~(1 << i) & ~(1 << j) & bitmap, depth + 1));
     answer_cache_[bitmap] = max_score;
     return max_score;
   }
