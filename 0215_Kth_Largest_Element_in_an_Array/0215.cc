@@ -5,23 +5,29 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <queue>
 #include <set>
 #include <thread>
 #include <vector>
 
+using std::cout;
+using std::endl;
 using std::multiset;
+using std::priority_queue;
 using std::vector;
 
 class Solution {
  public:
   int findKthLargest(const vector<int>& nums, int k) {
-    multiset<int> k_nums;
-    k_nums.insert(INT_MIN);
-    for (const int num : nums) {
-      if (*k_nums.cbegin() <= num) k_nums.insert(num);
-      if (k_nums.size() > k) k_nums.erase(k_nums.begin());
-    }
-    return *k_nums.cbegin();
+    priority_queue<int, vector<int>, std::greater<int>> min_heap;
+    for (int i = 0; i < k; ++i)
+      min_heap.push(nums[i]);
+    for (int i = k; i < nums.size(); ++i)
+      if (min_heap.top() < nums[i]) {
+        min_heap.push(nums[i]);
+        min_heap.pop();
+      }
+    return min_heap.top();
   }
 };
 
@@ -40,10 +46,10 @@ int main(void) {
   delete[] buf;
   const int test_k = test_vec.back();
   test_vec.pop_back();
-  std::cout << "time to prepare data: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << " milliseconds" << std::endl;
+  cout << "time to prepare data: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << " milliseconds" << endl;
   start = std::chrono::system_clock::now();
   int rtn = sln.findKthLargest(test_vec, test_k);
-  std::cout << "time to calculate: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << " milliseconds" << std::endl;
+  cout << "time to calculate: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << " milliseconds" << endl;
 
   return 0;
 }
