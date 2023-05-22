@@ -20,11 +20,11 @@ class Solution {
       frequence_count[iter->second - 1].push_front(iter->first);
 
     vector<int> rtn;
-    for (int i = frequence_count.size() - 1; 0 <= i; --i)
-      for (auto iter = frequence_count[i].cbegin(); iter != frequence_count[i].cend(); ++iter) {
+    for (int i = frequence_count.size() - 1; 0 <= i; --i) {
+      for (auto iter = frequence_count[i].cbegin(); iter != frequence_count[i].cend(); ++iter)
         rtn.push_back(*iter);
-        if (rtn.size() == k) return rtn;
-      }
+      if (rtn.size() == k) return rtn;
+    }
 
     return rtn;
   }
