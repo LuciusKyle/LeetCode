@@ -1,29 +1,35 @@
 
 #include <limits.h>
 
+#include <algorithm>
 #include <vector>
 
 using std::vector;
 
 class Solution {
  public:
-  int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
-    vector<int> pos_map(2001, INT_MAX);
-    for (int i = 0; i < nums1.size(); ++i)
-      pos_map[nums1[i]] = i;
-    vector<int> line_count(nums2.size(), -1);
-    int answer = 0;
-    for (int i = 0; i < nums2.size(); ++i) {
-      if (pos_map[nums2[i]] == INT_MAX)
-        continue;
-      int max_if_draw_this = 1;
-      for (int j = 0; j < i; ++j)
-        if (line_count[j] != -1 && pos_map[nums2[j]] < pos_map[nums2[i]]) {
-          max_if_draw_this = std::max(max_if_draw_this, line_count[j] + 1);
-        }
-      line_count[i] = max_if_draw_this;
-      answer = std::max(answer, max_if_draw_this);
+  int maxUncrossedLines(const vector<int>& nums1, const vector<int>& nums2) {
+    vector<int> curr_LCS(nums1.size(), 1), next_LCS(nums1.size());
+    for (int i = 0; i < nums1.size(); ++i) {
+      if (nums1[i] == nums2.front())
+        break;
+      curr_LCS[i] = 0;
     }
-    return answer;
+    for (int i = 1; i < nums2.size(); ++i) {
+      next_LCS[0] = ((nums1[0] == nums2[i] || curr_LCS[0] != 0) ? 1 : 0);
+      for (int j = 1; j < nums1.size(); ++j)
+        if (nums1[j] == nums2[i])
+          next_LCS[j] = std::max({next_LCS[j - 1], curr_LCS[j], curr_LCS[j - 1] + 1});
+        else
+          next_LCS[j] = std::max(next_LCS[j - 1], curr_LCS[j]);
+      curr_LCS.swap(next_LCS);
+    }
+    return curr_LCS.back();
   }
 };
+
+int main(int argc, char* argv[]) {
+  Solution sln;
+  sln.maxUncrossedLines({1}, {1, 3});
+  return 0;
+}
