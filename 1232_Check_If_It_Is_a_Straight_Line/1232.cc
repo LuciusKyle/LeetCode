@@ -15,7 +15,7 @@ class Solution {
     }
     const double ratio = double(coordinates[1][1] - coordinates[0][1]) / (coordinates[1][0] - coordinates[0][0]);
     for (int i = 2; i < coordinates.size(); ++i)
-      if (0.000001 < std::abs(ratio - double(coordinates[i][1] - coordinates[0][1]) / (coordinates[i][0] - coordinates[0][0]))) return false;
+      if ((coordinates[i][0] == coordinates[0][0]) || 0.000001 < std::abs(ratio - double(coordinates[i][1] - coordinates[0][1]) / (coordinates[i][0] - coordinates[0][0]))) return false;
     return true;
   }
 };
