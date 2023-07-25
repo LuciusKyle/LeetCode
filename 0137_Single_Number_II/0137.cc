@@ -1,33 +1,26 @@
 
 
 #include <assert.h>
+
 #include <array>
 #include <vector>
 
 using std::vector;
 
-constexpr std::array every_bit{
-    1 << 0x0,  1 << 0x1,  1 << 0x2,  1 << 0x3,  1 << 0x4,  1 << 0x5,  1 << 0x6,
-    1 << 0x7,  1 << 0x8,  1 << 0x9,  1 << 0xa,  1 << 0xb,  1 << 0xc,  1 << 0xd,
-    1 << 0xe,  1 << 0xf,  1 << 0x10, 1 << 0x11, 1 << 0x12, 1 << 0x13, 1 << 0x14,
-    1 << 0x15, 1 << 0x16, 1 << 0x17, 1 << 0x18, 1 << 0x19, 1 << 0x1a, 1 << 0x1b,
-    1 << 0x1c, 1 << 0x1d, 1 << 0x1e, 1 << 0x1f};
+constexpr int kBitsMask[] = {1 << 0, 1 << 1, 1 << 2, 1 << 3, 1 << 4, 1 << 5, 1 << 6, 1 << 7, 1 << 8, 1 << 9, 1 << 10, 1 << 11, 1 << 12, 1 << 13, 1 << 14, 1 << 15, 1 << 16, 1 << 17, 1 << 18, 1 << 19, 1 << 20, 1 << 21, 1 << 22, 1 << 23, 1 << 24, 1 << 25, 1 << 26, 1 << 27, 1 << 28, 1 << 29, 1 << 30, 1 << 31};
+constexpr int kRepeatTimes = 3;
 
-constexpr int repeated_times = 3;
-
-// my answer. 16ms running time, 16% beat.
 class Solution {
  public:
   int singleNumber(const vector<int>& nums) {
-    std::array<int, 32> rtn_bit{0};
+    int bits_count[32] = {0};
     for (const auto num : nums)
-      for (size_t i = 0; i < every_bit.size(); ++i)
-        if (every_bit[i] & num) ++rtn_bit[i];
-    int rtn_val = 0;
-    for (size_t i = 0; i < every_bit.size(); ++i)
-      if (rtn_bit[i] % repeated_times != 0) rtn_val |= every_bit[i];
-
-    return rtn_val;
+      for (int i = 0; i < std::end(kBitsMask) - std::begin(kBitsMask); ++i)
+        bits_count[i] += ((kBitsMask[i] & num) >> i);
+    int result = 0;
+    for (int i = 0; i < std::end(kBitsMask) - std::begin(kBitsMask); ++i)
+      result |= ((bits_count[i] % kRepeatTimes) == 0 ? 0 : 1) * kBitsMask[i];
+    return result;
   }
 };
 
