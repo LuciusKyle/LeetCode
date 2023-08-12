@@ -12,27 +12,34 @@ using std::vector;
 class Solution {
  public:
   int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
-    const int rows = obstacleGrid.size(), columns = obstacleGrid[0].size();
-    vector<vector<size_t>> grid_copy(rows + 1, vector<size_t>(columns + 1, 0));
-    for (size_t row = 0; row < rows; ++row)
-      for (size_t column = 0; column < columns; ++column) grid_copy[row][column] = obstacleGrid[row][column];
-    for (int i = 0; i < rows; ++i) obstacleGrid[i].push_back(0);
-    // obstacleGrid.push_back(vector<int>(columns + 1, 0));
-
-    if (obstacleGrid[rows - 1][columns - 1] == 1)
+    if (obstacleGrid[0][0] == 1)
       return 0;
-    else
-      // obstacleGrid[rows - 1][columns - 1] = 2;
-      grid_copy[rows - 1][columns - 1] = 2;
-
-    for (int row = rows - 1; 0 <= row; --row)
-      for (int column = columns - 1; 0 <= column; --column)
-        if (grid_copy[row][column])
-          --grid_copy[row][column];
+    const int rows = obstacleGrid.size(), columns = obstacleGrid[0].size();
+    if (obstacleGrid[rows - 1][columns - 1] == 1) return 0;
+    obstacleGrid[0][0] = 1;
+    bool meet_a_obstacle = false;
+    for (int i = 1; i < rows; ++i)
+      if (!meet_a_obstacle && obstacleGrid[i][0] == 0)
+        obstacleGrid[i][0] = 1;
+      else {
+        meet_a_obstacle = true;
+        obstacleGrid[i][0] = 0;
+      }
+    meet_a_obstacle = false;
+    for (int i = 1; i < columns; ++i)
+      if (!meet_a_obstacle && obstacleGrid[0][i] == 0)
+        obstacleGrid[0][i] = 1;
+      else {
+        meet_a_obstacle = true;
+        obstacleGrid[0][i] = 0;
+      }
+    for (int row = 1; row < rows; ++row)
+      for (int column = 1; column < columns; ++column)
+        if (obstacleGrid[row][column] == 0)
+          obstacleGrid[row][column] = obstacleGrid[row - 1][column] + obstacleGrid[row][column - 1];
         else
-          grid_copy[row][column] = grid_copy[row + 1][column] + grid_copy[row][column + 1];
-
-    return grid_copy[0][0];
+          obstacleGrid[row][column] = 0;
+    return obstacleGrid[rows - 1][columns - 1];
   }
 };
 
