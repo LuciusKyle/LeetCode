@@ -15,15 +15,14 @@ class Solution {
     std::sort(std::begin(freq), std::end(freq));
     int answer = 0;
     for (int i = 24; 0 <= i; --i)
-      if (freq[i + 1] <= freq[i])
-        if (freq[i + 1] == 0) {
-          answer += freq[i];
+      if (freq[i + 1] <= freq[i] && freq[i] != 0) {
+        answer += (freq[i] - freq[i + 1] + 1);
+        freq[i] = freq[i + 1] - 1;
+        if (freq[i] == -1) {
           freq[i] = 0;
-        } else {
-          answer += freq[i] - (freq[i + 1] - 1);
-          freq[i] = freq[i + 1] - 1;
+          --answer;
         }
-
+      }
     return answer;
   }
 };
