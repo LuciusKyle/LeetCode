@@ -1,12 +1,13 @@
 
 #include <algorithm>
+#include <numeric>
 #include <unordered_map>
 #include <vector>
 
-constexpr int kModulo = 1'000'000'000 + 7;
-
 using std::unordered_map;
 using std::vector;
+
+constexpr int kModulo = 1'000'000'000 + 7;
 
 class Solution {
  public:
@@ -17,15 +18,17 @@ class Solution {
     std::sort(arr.begin(), arr.end());
     int answer = 0;
     for (int i = 0; i < arr.size(); ++i) {
-      for (int j = 0; j < i; ++j) {
-        if (nums.count(int64_t(arr[i]) * arr[j]) != 0) {
-          nums[arr[i] * arr[j]] += (int64_t(2) * nums[arr[i]] * nums[arr[j]] % kModulo);
-          nums[arr[i] * arr[j]] %= kModulo;
+      for (int j = 0; j < i && int64_t(arr[j]) * arr[i] <= arr.back() /*crucial optimization*/; ++j) {
+        const int64_t product = int64_t(arr[i]) * arr[j];
+        if (nums.count(product) != 0) {
+          nums[product] += (int64_t(2) * nums[arr[i]] * nums[arr[j]] % kModulo);
+          nums[product] %= kModulo;
         }
       }
-      if (nums.count(int64_t(arr[i]) * arr[i]) != 0) {
-        nums[arr[i] * arr[i]] += (int64_t(nums[arr[i]]) * nums[arr[i]] % kModulo);
-        nums[arr[i] * arr[i]] %= kModulo;
+      const int64_t product = int64_t(arr[i]) * arr[i];
+      if (nums.count(product) != 0) {
+        nums[product] += (int64_t(nums[arr[i]]) * nums[arr[i]] % kModulo);
+        nums[product] %= kModulo;
       }
       answer += nums[arr[i]];
       answer %= kModulo;
